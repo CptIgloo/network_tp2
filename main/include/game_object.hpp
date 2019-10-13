@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+#include "streams.hpp"
 
 using ReplicationClassID = uint32_t;
 
@@ -12,5 +13,7 @@ static GameObject* CreateInstance() {return new className();}       \
 class GameObject
 {
 public:
-
+    virtual void Destroy();
+    virtual int Write(OutputStream& input);
+    virtual int Read(InputStream& input);
 };

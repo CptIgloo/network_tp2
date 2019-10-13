@@ -2,11 +2,15 @@ cmake_minimum_required(VERSION 3.10)
 
 set(replication_sources src/main.cpp
                         src/game_object.cpp
+                        src/player.cpp
+                        src/enemy.cpp
                         src/streams.cpp)
 
 include_directories(include)
 set(replication_headers include/game_object.hpp
                         include/utils.hpp
+                        include/player.hpp
+                        include/enemy.hpp
                         include/streams.hpp)
 
 add_executable(tp2 ${replication_sources} ${replication_headers})
