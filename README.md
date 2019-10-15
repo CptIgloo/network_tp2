@@ -1,5 +1,21 @@
 # Network Programming Lab 2
 
-To clone this repo use the command : 
+## TODO 
 
-`git clone --recursive https://github.com/VALERE91/network_tp2`
+* Paquets
+    * Structure
+    * Paquet HELLO
+    * Paquet BYE
+    * Paquet SYNC
+    * Construction
+    * Interprétation
+    * Caching
+        * Si y'as du reste voir si le début correspond au header
+            * Si oui on cache 
+            * Sinon ça dégage      
+
+* Linking Context
+* Class registry
+* Replication Manager 
+* Serveur
+* Client
