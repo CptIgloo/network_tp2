@@ -11,7 +11,6 @@ void listen(uvw::Loop &loop) {
 
         client->on<uvw::CloseEvent>([ptr = srv.shared_from_this()](const uvw::CloseEvent &, uvw::TCPHandle &) { ptr->close(); });
         client->on<uvw::EndEvent>([](const uvw::EndEvent &, uvw::TCPHandle &client) { client.close(); });
-
         srv.accept(*client);
         client->read();
     });
