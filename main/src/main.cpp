@@ -1,8 +1,11 @@
 #include <iostream>
 
+#include <server.hpp>
+
 #include <uvw.hpp>
 #include <memory>
 
+/*
 void listen(uvw::Loop &loop) {
     std::shared_ptr<uvw::TCPHandle> tcp = loop.resource<uvw::TCPHandle>();
 
@@ -17,29 +20,16 @@ void listen(uvw::Loop &loop) {
 
     tcp->bind("127.0.0.1", 4242);
     tcp->listen();
-}
-
-void conn(uvw::Loop &loop) {
-    auto tcp = loop.resource<uvw::TCPHandle>();
-
-    tcp->on<uvw::ErrorEvent>([](const uvw::ErrorEvent &, uvw::TCPHandle &) { /* handle errors */ });
-
-    tcp->on<uvw::ConnectEvent>([](const uvw::ConnectEvent &, uvw::TCPHandle &tcp) {
-        auto dataWrite = std::unique_ptr<char[]>(new char[2]{ 'b', 'c' });
-        tcp.write(std::move(dataWrite), 2);
-        tcp.close();
-    });
-
-    tcp->on<uvw::DataEvent>([](const uvw::DataEvent& evt, uvw::TCPHandle &){
-        std::cout << evt.data << std::endl;
-    });
-
-    tcp->connect(std::string{"127.0.0.1"}, 4242);
-}
+}*/
 
 int main() {
-    auto loop = uvw::Loop::getDefault();
-    listen(*loop);
-    conn(*loop);
-    loop->run();
+    Server server = Server("127.0.0.1",4242);
+    server.run();
+    std::cout<<"test"<<std::endl;
+	uint8_t test[1] = {(uint8_t)48};
+    while(true)
+    {
+        server.run();
+        server.send(test,1);
+    }
 }
