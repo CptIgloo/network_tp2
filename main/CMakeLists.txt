@@ -6,7 +6,8 @@ set(replication_sources src/main.cpp
                         src/enemy.cpp
                         src/streams.cpp
                         src/linking_context.cpp
-                        src/server.cpp)
+                        src/server.cpp
+                        src/classRegistry.cpp)
 
 set(test_client_sources src/test_client.cpp
                         src/game_object.cpp
@@ -14,7 +15,8 @@ set(test_client_sources src/test_client.cpp
                         src/enemy.cpp
                         src/streams.cpp
                         src/linking_context.cpp
-                        src/server.cpp)
+                        src/server.cpp
+                        src/classRegistry.cpp)
 
 include_directories(include)
 set(replication_headers include/game_object.hpp
@@ -23,7 +25,8 @@ set(replication_headers include/game_object.hpp
                         include/enemy.hpp
                         include/streams.hpp
                         include/linking_context.hpp
-                        include/server.hpp)
+                        include/server.hpp
+                        include/classRegistry.hpp)
 
 add_executable(tp2 ${replication_sources} ${replication_headers})
 add_executable(test ${test_client_sources} ${replication_headers})
