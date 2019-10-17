@@ -5,7 +5,12 @@
 class ClassRegistry 
 {
     private:
+        static ClassRegistry *s_instance; 
         std::map<ReplicationClassID,std::function<GameObject(void)>> classRegister;
     public:
+        static ClassRegistry* instance();
+        ~ClassRegistry();
         GameObject Create(ReplicationClassID);
+        void removeClassID(ReplicationClassID repCID);
+        void addClassID(ReplicationClassID,std::function<GameObject(void)>);
 };
