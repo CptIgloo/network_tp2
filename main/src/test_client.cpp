@@ -8,28 +8,27 @@ void conn(uvw::Loop &loop) {
 
     tcp->on<uvw::ConnectEvent>([](const uvw::ConnectEvent &, uvw::TCPHandle &tcp) {
         std::cout<<"Connected !"<<std::endl;
+        tcp.read();
     });
 
     tcp->on<uvw::EndEvent>([](const uvw::EndEvent &, uvw::TCPHandle &tcp) { 
         
     });
 
-    tcp->on<uvw::DataEvent>([](const uvw::DataEvent& evt, uvw::TCPHandle &){
-        std::cout << "Received " << evt.data << std::endl;
+    tcp->on<uvw::DataEvent>([](const uvw::DataEvent& evt, uvw::TCPHandle &)
+    {
+       //TODO Receive DATA
     });
 
     tcp->connect(std::string{"127.0.0.1"}, 4242);
-
-    tcp->read();
 }
 
 int main()
 {   
-    auto loop = uvw::Loop::getDefault();
+    std::shared_ptr<uvw::Loop> loop = uvw::Loop::getDefault();
     conn(*loop);
-
     while(true)
     {
-        loop->run();
+        loop->run<uvw::Loop::Mode::NOWAIT>();
     }
 }

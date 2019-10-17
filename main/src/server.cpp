@@ -38,12 +38,10 @@ Server::Server(std::string ip,int port)
             }
         });
 
-        /*
         client->on<uvw::WriteEvent>([](const uvw::WriteEvent &e, uvw::TCPHandle &client){
             std::cout<<"Ecriture ! "<<std::endl;
             std::cout<<client.writeQueueSize()<<std::endl;
         });
-        */
 
         srv.accept(*client);
         
@@ -77,6 +75,7 @@ void Server::send(uint8_t* data,int size)
             std::cout<<client->writeQueueSize()<<std::endl;
         }
 
+        //TODO Virer
         this->oneTime++;
     }
 }
