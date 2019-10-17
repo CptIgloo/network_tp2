@@ -17,7 +17,15 @@ void conn(uvw::Loop &loop) {
 
     tcp->on<uvw::DataEvent>([](const uvw::DataEvent& evt, uvw::TCPHandle &)
     {
-       //TODO Receive DATA
+        std::string parser;
+
+        for(int i = 0;i<(int)evt.length;i++)
+        {
+            parser += evt.data[i];
+        }
+
+        //TODO Parser paquet !
+        std::cout<<"Recu : "<<parser<<std::endl;
     });
 
     tcp->connect(std::string{"127.0.0.1"}, 4242);
@@ -25,6 +33,7 @@ void conn(uvw::Loop &loop) {
 
 int main()
 {   
+    std::cout<<"Connecting"<<std::endl;
     std::shared_ptr<uvw::Loop> loop = uvw::Loop::getDefault();
     conn(*loop);
     while(true)

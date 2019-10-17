@@ -1,6 +1,7 @@
 #include "server.hpp"
 #include <algorithm>
 #include <iostream>
+#include <thread>
 
 Server::Server(std::string ip,int port)
 {
@@ -22,7 +23,6 @@ Server::Server(std::string ip,int port)
 
         client->on<uvw::ErrorEvent>([this](const uvw::ErrorEvent &e, uvw::TCPHandle &client){
             std::cout<<"Error : "<<e.what()<<std::endl;
-            std::cout<<client.writeQueueSize()<<std::endl;
             
             client.close();
             int i =0;
@@ -40,7 +40,6 @@ Server::Server(std::string ip,int port)
 
         client->on<uvw::WriteEvent>([](const uvw::WriteEvent &e, uvw::TCPHandle &client){
             std::cout<<"Ecriture ! "<<std::endl;
-            std::cout<<client.writeQueueSize()<<std::endl;
         });
 
         srv.accept(*client);
@@ -51,6 +50,8 @@ Server::Server(std::string ip,int port)
 
     tcp->bind(this->ip, this->port);
     tcp->listen();
+
+    std::cout<<"Accepting clients"<<std::endl;
 }
 
 Server::~Server()
@@ -60,22 +61,14 @@ Server::~Server()
 }
 
 void Server::run()
-{
+{   
     this->loop->run<uvw::Loop::Mode::NOWAIT>();
 }
 
 void Server::send(uint8_t* data,int size)
 {
-    if(this->oneTime == 0 && !clients.empty())
-    {
-        for(std::shared_ptr<uvw::TCPHandle> client : clients)
-        {
-            auto dataWrite = std::unique_ptr<char[]>(new char[2]{ 'b', 'c' });
-            client->write(std::move(dataWrite), 2);
-            std::cout<<client->writeQueueSize()<<std::endl;
-        }
-
-        //TODO Virer
-        this->oneTime++;
+    for(std::shared_ptr<uvw::TCPHandle> client : clients)
+    {   
+        client->write((char*)data, size);
     }
 }
