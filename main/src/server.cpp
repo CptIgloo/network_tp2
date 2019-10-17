@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <iostream>
 #include <thread>
+#include "player.hpp"
 
 Server::Server(std::string ip,int port)
 {
