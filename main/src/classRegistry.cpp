@@ -1,8 +1,5 @@
 #include "classRegistry.hpp"
 
-ClassRegistry::ClassRegistry(){
-}
-
 ClassRegistry::~ClassRegistry(){
     this->classRegister.clear();
 }
