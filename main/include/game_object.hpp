@@ -14,6 +14,9 @@ class GameObject
 {
 public:
     virtual void Destroy();
+    ReplicationClassID getReplicationClassID(){
+        return 1;
+    }
     virtual int Write(OutputStream& input);
     virtual int Read(InputStream& input);
 };

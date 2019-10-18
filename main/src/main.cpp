@@ -13,7 +13,7 @@
 int main() {
     Enemy e;
 
-    //ClassRegistry::instance()->addClassID(Enemy::GameObject::);
+    ClassRegistry::instance()->addClassID();
     /*
     Server server = Server("127.0.0.1",4242);
 	uint8_t test[1] = {0x34};
