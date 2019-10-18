@@ -17,6 +17,10 @@
 * Class registry
 * Replication Manager 
 * Serveur
+    * Faire une fonction de démo
+    * Brancher la sérialization
 * Client
+    * Brancher la désérialization
+    * Affichage
 
 * Main

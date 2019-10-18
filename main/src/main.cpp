@@ -3,6 +3,21 @@
 #include <server.hpp>
 #include <client.hpp>
 
+void runAsClient(std::string ip,int port)
+{
+    std::cout<<"Connecting to "<<ip<<"on port "<<port<<std::endl;
+    Client client = Client(ip,port);
+    while(client.continueRunning())
+    {
+        client.Run();
+    }
+}
+
+void runAsServer()
+{
+    //TODO
+}
+
 int main(int argc, char *argv[]) 
 {
     if(argc != 4)
@@ -31,7 +46,15 @@ int main(int argc, char *argv[])
 
     int port = std::stoi(argv[3]);
 
-    std::cout<<"Executing "<<type<<" at ip "<<ip<<" with port "<<port<<std::endl;
+    //Already checked, type can only be server or client
+    if(type == "server")
+    {
+
+    }
+    else
+    {
+        runAsClient(ip,port);
+    }
 
     return EXIT_SUCCESS;
 }
