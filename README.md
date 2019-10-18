@@ -14,8 +14,9 @@
             * Si oui on cache 
             * Sinon ça dégage      
 
-* Linking Context
 * Class registry
 * Replication Manager 
 * Serveur
 * Client
+
+* Main

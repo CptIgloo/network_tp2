@@ -10,7 +10,14 @@ Client::Client(std::string ip,int port)
 
     auto tcp =  this->loop->resource<uvw::TCPHandle>();
 
-    tcp->on<uvw::ErrorEvent>([](const uvw::ErrorEvent &e, uvw::TCPHandle &) { std::cout<<"Error "<<e.what()<<std::endl; });
+    tcp->on<uvw::CloseEvent>([this](const uvw::CloseEvent &e,uvw::TCPHandle &tcp){
+        this->Stop();
+    });
+
+    tcp->on<uvw::ErrorEvent>([](const uvw::ErrorEvent &e, uvw::TCPHandle &tcp) { 
+        std::cout<<"Error "<<e.what()<<std::endl; 
+        tcp.close();
+    });
 
     tcp->on<uvw::ConnectEvent>([](const uvw::ConnectEvent &, uvw::TCPHandle &tcp) {
         std::cout<<"Connected !"<<std::endl;
@@ -42,6 +49,16 @@ Client::Client(std::string ip,int port)
 Client::~Client()
 {
     this->loop->close();
+}
+
+void Client::Stop()
+{
+    this->continueToRun = false;
+}
+
+bool Client::continueRunning()
+{
+    return this->continueToRun;
 }
 
 void Client::Run()
