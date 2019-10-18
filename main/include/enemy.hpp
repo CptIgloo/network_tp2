@@ -1,12 +1,9 @@
 #include "game_object.hpp"
 #include <string>
-#include <iostream>
-
 
 class Enemy : public GameObject
 {
-public: 
-    Enemy(){ std::cout<<"Enemy created"<<std::endl;};
+public:
     float posX;
     float posY;
     float posZ;
@@ -15,6 +12,6 @@ public:
     float rotY;
     float rotZ;
     float rotW;
-    int Write(OutputStream& input);// override;
-    int Read(InputStream& input);// override;
+    int Write(OutputStream& input) override;
+    int Read(InputStream& input) override;
 };
