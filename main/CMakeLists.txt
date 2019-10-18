@@ -6,7 +6,8 @@ set(replication_sources src/game_object.cpp
                         src/streams.cpp
                         src/linking_context.cpp
                         src/server.cpp
-                        src/client.cpp)
+                        src/client.cpp
+                        src/packet_manager.cpp)
 
 set(main_sources        src/main.cpp
                         ${replication_sources})
@@ -28,7 +29,8 @@ set(replication_headers include/game_object.hpp
                         include/streams.hpp
                         include/linking_context.hpp
                         include/server.hpp
-                        include/client.hpp)
+                        include/client.hpp
+                        include/packet_manager.hpp)
 
 add_executable(tp2 ${main_sources} ${replication_headers})
 add_executable(test_client ${test_client_sources} ${replication_headers})
