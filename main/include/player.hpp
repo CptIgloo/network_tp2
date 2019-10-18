@@ -12,6 +12,7 @@ public:
     float rotY;
     float rotZ;
     float rotW;
-    int Write(OutputStream& input) override;
-    int Read(InputStream& input) override;
+
+    int Write(OutputStream& input); //override;
+    int Read(InputStream& input);// override;
 };
