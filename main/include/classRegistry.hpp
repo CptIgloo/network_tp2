@@ -5,13 +5,15 @@
 class ClassRegistry 
 {
     private:
-        static ClassRegistry *s_instance; 
         std::map<ReplicationClassID,std::function<GameObject(void)>> classRegister;
+        ClassRegistry() = default;
+        ~ClassRegistry();
     public:
-        static ClassRegistry* getInstance(){
-            if (!s_instance)
-                s_instance = new ClassRegistry;
-            return s_instance;
+        static ClassRegistry& getInstance(){
+            //test
+            static ClassRegistry instance;
+            return instance;
+            
         }
         ~ClassRegistry();
         GameObject Create(ReplicationClassID);
