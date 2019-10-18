@@ -5,8 +5,9 @@
     "version": "0.2.0",
     "configurations": [
 
+
         {
-            "name": "Test server",
+            "name": "Test Main",
             "type": "cppvsdbg",
             "request": "launch",
             "program": "${workspaceFolder}/build/main/tp2.exe",
@@ -17,6 +18,17 @@
             "externalConsole": false
         },
         {
+            "name": "Test client",
+            "type": "cppvsdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/main/test_client.exe",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": true
+        },
+        {
             "name": "Test",
             "type": "cppvsdbg",
             "request": "launch",
@@ -25,7 +37,7 @@
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],
-            "externalConsole": true
+            "externalConsole": false
         }
     ]
 }
