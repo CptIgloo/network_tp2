@@ -3,15 +3,9 @@
 
 class Player : public GameObject
 {
-public:
-    float posX;
-    float posY;
-    float posZ;
+private:
     std::string nom;
-    float rotX;
-    float rotY;
-    float rotZ;
-    float rotW;
+public:
     int Write(OutputStream& input) override;
     int Read(InputStream& input) override;
 };

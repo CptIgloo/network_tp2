@@ -3,15 +3,18 @@
 
 class Enemy : public GameObject
 {
-public:
+private:
+     std::string type;
+
     float posX;
     float posY;
     float posZ;
-    std::string type;
+   
     float rotX;
     float rotY;
     float rotZ;
     float rotW;
+public:
     int Write(OutputStream& input) override;
     int Read(InputStream& input) override;
 };
