@@ -12,6 +12,7 @@ void ClassRegistry::removeClassID(ReplicationClassID repCID){
     if(this->classRegister.find(repCID)!=this->classRegister.end()){
         this->classRegister.erase(repCID);
     }
+    //TODO Optionnal
     assert(EXIT_FAILURE);
 }
 

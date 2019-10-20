@@ -8,10 +8,11 @@ public:
     float posY;
     float posZ;
     std::string nom;
+    static const ReplicationClassID classID=0x02; 
     float rotX;
     float rotY;
     float rotZ;
     float rotW;
-    int Write(OutputStream& input) override;
-    int Read(InputStream& input) override;
+    int Write(OutputStream &stream) override;
+    int Read(InputStream &stream) override;
 };

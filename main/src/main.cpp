@@ -22,6 +22,9 @@ void runAsServer()
 
 int main(int argc, char *argv[]) 
 {
+    std::cout<<"Begin"<<std::endl;
+    Enemy e;
+    std::cout <<std::to_string(Enemy::classID)<<std::endl;
     if(argc != 4)
     {
         std::cout<<"Error : Incorrect number of arguments"<<std::endl;

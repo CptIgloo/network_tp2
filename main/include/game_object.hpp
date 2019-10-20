@@ -3,7 +3,7 @@
 #include <cstdint>
 #include "streams.hpp"
 
-using ReplicationClassID = uint32_t;
+using ReplicationClassID = uint8_t;
 
 #define REPLICATED(id,className)                                    \
 enum : ReplicationClassID{mClassID = id};                           \
@@ -13,10 +13,8 @@ static GameObject* CreateInstance() {return new className();}       \
 class GameObject
 {
 public:
-    virtual void Destroy();
-    ReplicationClassID getReplicationClassID(){
-        return 1;
-    }
-    virtual int Write(OutputStream& input);
-    virtual int Read(InputStream& input);
+    static const ReplicationClassID classID=0x01; 
+    //virtual void Destroy();
+    virtual int Write(OutputStream &stream);
+    virtual int Read(InputStream &stream);
 };

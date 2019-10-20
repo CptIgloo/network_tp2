@@ -10,13 +10,11 @@ class ClassRegistry
         ~ClassRegistry();
     public:
         static ClassRegistry& getInstance(){
-            //test
             static ClassRegistry instance;
             return instance;
             
         }
-        ~ClassRegistry();
-        GameObject Create(ReplicationClassID);
+        GameObject Create(ReplicationClassID repCID);
         void removeClassID(ReplicationClassID repCID);
-        void addClassID(ReplicationClassID,std::function<GameObject(void)>);
+        void addClassID(ReplicationClassID repCID,std::function<GameObject(void)> fun);
 };
