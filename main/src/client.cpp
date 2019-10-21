@@ -1,5 +1,7 @@
 #include "client.hpp"
 #include <iostream>
+#include "streams.hpp"
+#include "replication_manager.hpp"
 
 Client::Client(std::string ip,int port)
 {
@@ -30,17 +32,16 @@ Client::Client(std::string ip,int port)
 
     tcp->on<uvw::DataEvent>([](const uvw::DataEvent& evt, uvw::TCPHandle &)
     {
-        std::string parser;
+        std::string received_string;
 
         for(int i = 0;i<(int)evt.length;i++)
         {
-            parser += evt.data[i];
+            received_string += evt.data[i];
         }
 
-        uint8_t* received = (uint8_t*) parser.c_str();
-        
-        //TODO Parser paquet !
-        std::cout<<"Recu : "<<parser<<std::endl;
+        OutputStream out = OutputStream();
+        out.WriteStr(received_string);
+        ReplicationManager::Replicate(out);
     });
 
     tcp->connect(std::string{"127.0.0.1"}, 4242);
