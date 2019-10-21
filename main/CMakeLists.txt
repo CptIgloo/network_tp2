@@ -30,6 +30,7 @@ set(replication_headers include/game_object.hpp
                         include/streams.hpp
                         include/linking_context.hpp
                         include/server.hpp
+                        include/classRegistry.hpp
                         include/client.hpp
                         include/packet_manager.hpp
                         include/replication_manager.hpp)

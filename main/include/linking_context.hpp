@@ -1,6 +1,6 @@
-#include <map>
 #include <optional>
 #include "game_object.hpp"
+#include <map>
 
 using NetworkID = uint16_t;
 
