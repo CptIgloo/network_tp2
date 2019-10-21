@@ -11,7 +11,7 @@
             "type": "cppvsdbg",
             "request": "launch",
             "program": "${workspaceFolder}/build/main/tp2.exe",
-            "args": [],
+            "args": ["server","127.0.0.1","80"],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],
