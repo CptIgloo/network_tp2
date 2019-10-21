@@ -4,8 +4,9 @@
 class Player : public GameObject
 {
 private:
-    std::string nom;
     static const ReplicationClassID classID=0x02; 
+    std::string name;
+    
 public:
     int Write(OutputStream& input) override;
     int Read(InputStream& input) override;

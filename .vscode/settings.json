@@ -61,6 +61,20 @@
         "xtr1common": "cpp",
         "xtree": "cpp",
         "xutility": "cpp",
-        "pointers": "cpp"
+        "pointers": "cpp",
+        "clocale": "cpp",
+        "cstdarg": "cpp",
+        "cwctype": "cpp",
+        "deque": "cpp",
+        "fstream": "cpp",
+        "queue": "cpp",
+        "random": "cpp",
+        "unordered_set": "cpp",
+        "*.tcc": "cpp",
+        "memory_resource": "cpp",
+        "cinttypes": "cpp",
+        "multi_span": "cpp",
+        "span": "cpp",
+        "string_span": "cpp"
     }
 }
