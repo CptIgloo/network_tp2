@@ -3,16 +3,11 @@
 
 class Player : public GameObject
 {
-public:
-    float posX;
-    float posY;
-    float posZ;
-    std::string nom;
+private:
     static const ReplicationClassID classID=0x02; 
-    float rotX;
-    float rotY;
-    float rotZ;
-    float rotW;
-    int Write(OutputStream &stream) override;
-    int Read(InputStream &stream) override;
+    std::string name;
+    
+public:
+    int Write(OutputStream& input) override;
+    int Read(InputStream& input) override;
 };

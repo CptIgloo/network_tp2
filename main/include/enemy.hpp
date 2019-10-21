@@ -3,17 +3,11 @@
 
 class Enemy : public GameObject
 {
-public:
-    float posX;
-    float posY;
-    float posZ;
+private:
     static const ReplicationClassID classID=0x03;  
     std::string type;
-    float rotX;
-    float rotY; 
-    float rotZ;
-    float rotW;
-    int Write(OutputStream &stream) override;
-    int Read(InputStream &stream) override;
-    
+
+public:
+    int Write(OutputStream& input) override;
+    int Read(InputStream& input) override;
 };
