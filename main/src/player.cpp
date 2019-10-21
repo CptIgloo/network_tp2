@@ -17,8 +17,9 @@ int Player::Write(OutputStream &stream)
     uint64_t PosZ = (uint32_t)((position.pos_z * 1000) + 500000);
 
     uint64_t dataPos = posX << 20 ;
-    uint64_t dataPos = posX+= PosY << 20 ;
-    uint64_t dataPos = posX+= PosZ;
+    dataPos += PosY << 20 ;
+    dataPos += PosZ;
+
     stream.Write<uint64_t>(dataPos);
 
     uint32_t compression;
@@ -81,8 +82,8 @@ int Player::Read(InputStream &stream)
     }
 
 	uint64_t posData = stream.Read<uint64_t>();
-	uint64_t z = 0x00000000000FFFFF & posData;
-	uint64_t y = 0x00000000000FFFFF & (posData >> 20);
+	uint64_t z = 0xFFFFF & posData;
+	uint64_t y = 0xFFFFF & (posData >> 20);
 	uint64_t x = 0xFFFFF & (posData >> 20);
 
     float fx = (y - 500000 ) / 1000;
