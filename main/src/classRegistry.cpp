@@ -1,5 +1,6 @@
 #include "classRegistry.hpp"
 
+
 ClassRegistry::~ClassRegistry(){
     this->classRegister.clear();
 }
@@ -22,3 +23,9 @@ GameObject ClassRegistry::Create(ReplicationClassID repCID){
     }
     assert(EXIT_FAILURE);
 }
+ void ClassRegistry::standardInit(){
+    auto lambda = [] () { return Enemy(); };
+    ClassRegistry::getInstance().addClassID(Enemy::classID,lambda);
+    auto lambda2=[] () { return Player(); };
+    ClassRegistry::getInstance().addClassID(Player::classID,lambda2);
+ }

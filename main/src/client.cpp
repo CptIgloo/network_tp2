@@ -38,10 +38,10 @@ Client::Client(std::string ip,int port)
         {
             received_string += evt.data[i];
         }
-
-        OutputStream out = OutputStream();
-        out.WriteStr(received_string);
-        ReplicationManager::Replicate(out);
+        gsl::span<char> data;
+        InputStream in = InputStream(data);
+        in.WriteStr(received_string);
+        ReplicationManager::Replicate(in);
     });
 
     tcp->connect(std::string{"127.0.0.1"}, 4242);

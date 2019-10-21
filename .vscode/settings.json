@@ -61,6 +61,11 @@
         "xtr1common": "cpp",
         "xtree": "cpp",
         "xutility": "cpp",
-        "pointers": "cpp"
+        "pointers": "cpp",
+        "unordered_set": "cpp",
+        "gsl_assert": "cpp",
+        "multi_span": "cpp",
+        "span": "cpp",
+        "string_span": "cpp"
     }
 }

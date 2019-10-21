@@ -1,5 +1,6 @@
 #pragma once
-
+#ifndef REPLICATIONCLASSID
+#define REPLICATIONCLASSID
 #include <cstdint>
 #include "streams.hpp"
 
@@ -18,3 +19,4 @@ public:
     virtual int Write(OutputStream &stream);
     virtual int Read(InputStream &stream);
 };
+#endif

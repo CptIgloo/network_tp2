@@ -1,6 +1,8 @@
 #include "game_object.hpp"
 #include <string>
 #include <map>
+#include "enemy.hpp"
+#include "player.hpp"
 
 class ClassRegistry 
 {
@@ -17,4 +19,5 @@ class ClassRegistry
         GameObject Create(ReplicationClassID repCID);
         void removeClassID(ReplicationClassID repCID);
         void addClassID(ReplicationClassID repCID,std::function<GameObject(void)> fun);
+        void standardInit();
 };

@@ -8,6 +8,6 @@ class ReplicationManager
         static std::unordered_set<GameObject*> replicatedObjects;
 
     public :
-        static void Replicate(InputStream stream,std::vector<GameObject*> objects);
-        static void Replicate(OutputStream stream);
+        static void Replicate(OutputStream stream,std::vector<GameObject*> objects);
+        static void Replicate(InputStream stream);
 };

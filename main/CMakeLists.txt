@@ -7,7 +7,7 @@ set(replication_sources src/game_object.cpp
                         src/linking_context.cpp
                         src/server.cpp
                         src/client.cpp
-                        src/packet_manager.cpp
+                        src/classRegistry.cpp
                         src/replication_manager.cpp)
 
 set(main_sources        src/main.cpp
@@ -32,7 +32,7 @@ set(replication_headers include/game_object.hpp
                         include/server.hpp
                         include/classRegistry.hpp
                         include/client.hpp
-                        include/packet_manager.hpp
+                        include/classRegistry.hpp
                         include/replication_manager.hpp)
 
 add_executable(tp2 ${main_sources} ${replication_headers})

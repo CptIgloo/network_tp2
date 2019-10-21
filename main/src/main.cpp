@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include <server.hpp>
+#include <replication_manager.hpp>
 #include <classRegistry.hpp>
 #include <enemy.hpp>
 #include <client.hpp>
@@ -22,9 +23,20 @@ void runAsServer()
 
 int main(int argc, char *argv[]) 
 {
-    std::cout<<"Begin"<<std::endl;
-    Enemy e;
-    std::cout <<std::to_string(Enemy::classID)<<std::endl;
+    ReplicationManager r;
+    std::vector<std::byte> data={(std::byte)0x00,(std::byte)0x01,(std::byte)0x03,(std::byte)0x05,(std::byte)0x06};
+    //data.push_back((std::byte)0x00);
+    /*data[1]=1;
+    data[2]=3;
+    data[3]=5;
+    data[4]=6;
+    */
+    InputStream in= InputStream(data);
+    ClassRegistry::getInstance().standardInit();
+    //in.Write(data);
+
+    r.Replicate(in);
+    /*
     if(argc != 4)
     {
         std::cout<<"Error : Incorrect number of arguments"<<std::endl;
@@ -54,12 +66,12 @@ int main(int argc, char *argv[])
     //Already checked, type can only be server or client
     if(type == "server")
     {
-
+            runAsServer();
     }
     else
     {
         runAsClient(ip,port);
     }
-
+*/
     return EXIT_SUCCESS;
 }
