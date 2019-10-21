@@ -64,5 +64,61 @@ int Enemy::Write(OutputStream& stream)
 
 int Enemy::Read(InputStream& stream)
 {
+    uint64_t posData = stream.Read<uint64_t>();
+	uint64_t z = 0x00000000000FFFFF & posData;
+	uint64_t y = 0x00000000000FFFFF & posData >> 20;
+	uint64_t x = 0xFFFFF & posData >> 20;
+
+    float fx = y -500000;
+    float fy = y -500000;
+    float fz = y -500000;
+
+	position.pos_x = fx / 1000;
+	position.pos_y = fy / 1000;
+	position.pos_z = fz / 1000;
+
+	uint32_t receivedQuat = stream.Read<uint32_t>();
+	uint8_t caseToIgnore = 0x2 & receivedQuat;
+
+	uint8_t offset = 2;
+	uint32_t sumSquareRoot = 0;
+	if (caseToIgnore != 0)
+	{
+		rotation.r_x = (static_cast<float>((0x3FF & receivedQuat >> offset) * 1047) / 1000) - 0.707;
+		sumSquareRoot += rotation.r_x  * rotation.r_x ;
+		offset += 10;
+	}
+	if (caseToIgnore != 1)
+	{
+		rotation.r_y = (static_cast<float>((0x3FF & receivedQuat >> offset) * 1047) / 1000) - 0.707;
+		sumSquareRoot += rotation.r_y * rotation.r_y;
+		offset += 10;
+	}
+	if (caseToIgnore != 2)
+	{
+		rotation.r_z = (static_cast<float>((0x3FF & receivedQuat >> offset) * 1047) / 1000) - 0.707;
+		sumSquareRoot += rotation.r_z * rotation.r_z;
+		offset += 10;
+	}
+	if (caseToIgnore != 3)
+	{
+		rotation.r_w = (static_cast<float>((0x3FF & receivedQuat >> offset) * 1047) / 1000) - 0.707;
+		sumSquareRoot += rotation.r_w  * rotation.r_w ;
+	}
+
+	if (caseToIgnore == 0) {
+		rotation.r_x = sqrtf(1.0f - sumSquareRoot);
+	}
+	if (caseToIgnore == 1) {
+		rotation.r_y  = sqrtf(1.0f - sumSquareRoot);
+	}
+	if (caseToIgnore == 2) {
+		rotation.r_z = sqrtf(1.0f - sumSquareRoot);
+	}
+	if (caseToIgnore == 3) {
+		rotation.r_w = sqrtf(1.0f - sumSquareRoot);
+	}
+
+    type = stream.ReadStr();
     return 0;
 }
