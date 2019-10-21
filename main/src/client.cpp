@@ -41,7 +41,7 @@ Client::Client(std::string ip,int port)
         gsl::span<char> data;
         InputStream in = InputStream(data);
         in.WriteStr(received_string);
-        ReplicationManager::Replicate(in);
+        ReplicationManager::getInstance().Replicate(in);
     });
 
     tcp->connect(std::string{"127.0.0.1"}, 4242);

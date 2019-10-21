@@ -1,6 +1,4 @@
 #pragma once
-#ifndef REPLICATIONCLASSID
-#define REPLICATIONCLASSID
 #include <cstdint>
 #include "streams.hpp"
 
@@ -17,11 +15,8 @@ class GameObject
 {
 public:
     static const ReplicationClassID classID=0x01; 
-    //virtual void Destroy();
-    virtual int Write(OutputStream &stream);
-    virtual int Read(InputStream &stream);
 
-    virtual void Destroy();
+    //virtual void Destroy();
     virtual int Write(OutputStream& input);
     virtual int Read(InputStream& input);
     

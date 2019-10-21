@@ -32,7 +32,6 @@ set(replication_headers include/game_object.hpp
                         include/server.hpp
                         include/classRegistry.hpp
                         include/client.hpp
-                        include/classRegistry.hpp
                         include/replication_manager.hpp)
 
 add_executable(tp2 ${main_sources} ${replication_headers})
