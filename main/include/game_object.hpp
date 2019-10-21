@@ -26,7 +26,6 @@ public:
         float pos_z;
     };
     struct Quaternion {
-        uint8_t compression : 2 ;
         float r_x;
         float r_y;
         float r_z;
