@@ -1,6 +1,6 @@
-#include <map>
 #include <optional>
 #include "game_object.hpp"
+#include <map>
 
 using NetworkID = uint16_t;
 
@@ -20,6 +20,8 @@ class LinkingContext
         static void addToContextWithId(GameObject* toAdd,NetworkID idToAdd);
         static void deleteFromContext(GameObject* toDelete);
         static void addToContext(GameObject* toAdd);
+        static int getSizeOfContext();
         static std::optional<NetworkID> getIdOfObject(GameObject * search);
         static std::optional<GameObject*> getObjectOfId(NetworkID search);
+        static void clearContext();
 };

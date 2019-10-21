@@ -9,9 +9,9 @@ private:
     float posX;
     float posY;
     float posZ;
-   
+    static const ReplicationClassID classID=0x03;  
     float rotX;
-    float rotY;
+    float rotY; 
     float rotZ;
     float rotW;
 public:

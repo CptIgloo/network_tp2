@@ -2,6 +2,7 @@
 
 int Enemy::Write(OutputStream& stream)
 {
+    
     return 0;
 }
 

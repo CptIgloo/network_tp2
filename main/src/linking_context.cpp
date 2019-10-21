@@ -1,7 +1,5 @@
 #include "linking_context.hpp"
 
-using NetworkID = uint16_t;
-
 NetworkID LinkingContext::currentID = 0;
 std::map<NetworkID,GameObject*> LinkingContext::idToPointerMap = std::map<NetworkID,GameObject*>();
 std::map<GameObject*,NetworkID> LinkingContext::pointerToIdMap = std::map<GameObject*,NetworkID>();
@@ -53,4 +51,15 @@ std::optional<GameObject*> LinkingContext::getObjectOfId(NetworkID search)
     {
         return {};
     }
+}
+
+int LinkingContext::getSizeOfContext()
+{
+    return idToPointerMap.size();
+}
+
+void LinkingContext::clearContext()
+{
+    pointerToIdMap.clear();
+    idToPointerMap.clear();
 }

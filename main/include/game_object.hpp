@@ -3,7 +3,7 @@
 #include <cstdint>
 #include "streams.hpp"
 
-using ReplicationClassID = uint32_t;
+using ReplicationClassID = uint8_t;
 
 #define REPLICATED(id,className)                                    \
 enum : ReplicationClassID{mClassID = id};                           \
@@ -15,6 +15,7 @@ enum QuaternionCompression {X = 0,Y=1,Z=2,W=3};
 class GameObject
 {
 public:
+    static const ReplicationClassID classID=0x01; 
     virtual void Destroy();
     virtual int Write(OutputStream& input);
     virtual int Read(InputStream& input);
