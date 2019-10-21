@@ -1,6 +1,6 @@
 #include "player.hpp"
-
 #include <iostream>
+
 int Player::Write(OutputStream &stream)
 {
     //float to int compression
@@ -150,7 +150,7 @@ int Player::Read(InputStream &stream)
            return -1;
         }
 	}
-    
+
     if(ignoredVal != 0)
     {
         rotation.r_x = rX;
