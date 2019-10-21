@@ -7,12 +7,16 @@
 
 std::unordered_set<GameObject*> ReplicationManager::replicatedObjects = std::unordered_set<GameObject*>();
 
-void ReplicationManager::Replicate(InputStream stream,std::vector<GameObject*> objects)
+void ReplicationManager::Replicate(InputStream &stream,std::vector<GameObject*> objects)
 {
+    stream.Flush();
 
+    std::string toSend = PacketManager::createReplicationPacket(objects);
+
+    stream.WriteStr(toSend);
 }
 
-void ReplicationManager::Replicate(OutputStream stream)
+void ReplicationManager::Replicate(OutputStream &stream)
 {
     std::string received_string = stream.ReadStr();
     int size = received_string.size();

@@ -13,7 +13,7 @@ enum class PacketType : uint8_t
 
 struct Packet
 {
-    char protocol[2] = {0xc0,0xde};
+    char protocol[2] = {(char)0xc0,(char)0xde};
     PacketType type;
     NetworkID network_id;  
     char* data;
@@ -23,6 +23,6 @@ struct Packet
 class PacketManager
 {
     public :
-        static std::string createPacket(std::vector<GameObject*> data);
+        static std::string createReplicationPacket(std::vector<GameObject*> objects);
         static std::optional<std::vector<std::byte>> parsePacket(std::vector<std::byte>);
 };
