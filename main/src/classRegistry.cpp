@@ -5,9 +5,6 @@ ClassRegistry::~ClassRegistry(){
     this->classRegister.clear();
 }
 
-void ClassRegistry::addClassID(ReplicationClassID repCID,std::function<GameObject(void)> fun){
-    this->classRegister.insert_or_assign(repCID,fun);
-}
 
 void ClassRegistry::removeClassID(ReplicationClassID repCID){
     if(this->classRegister.find(repCID)!=this->classRegister.end()){
@@ -17,15 +14,15 @@ void ClassRegistry::removeClassID(ReplicationClassID repCID){
     assert(EXIT_FAILURE);
 }
 
-GameObject ClassRegistry::Create(ReplicationClassID repCID){
+GameObject* ClassRegistry::Create(ReplicationClassID repCID)
+{
     if(this->classRegister.find(repCID)!=this->classRegister.end()){
         return this->classRegister[repCID]();
     }
-    assert(EXIT_FAILURE);
+    //TODO Cleanup ? 
+    return {};
 }
  void ClassRegistry::standardInit(){
-    auto lambda = [] ()->Enemy { return Enemy(); };
-    ClassRegistry::getInstance().addClassID(Enemy::classID,lambda);
-    auto lambda2=[] ()->Player { return Player(); };
-    ClassRegistry::getInstance().addClassID(Player::classID,lambda2);
+    ClassRegistry::getInstance().Register<Enemy>(Enemy());
+    ClassRegistry::getInstance().Register<Player>(Player());
  }

@@ -7,17 +7,20 @@
 class ClassRegistry 
 {
     private:
-        std::map<ReplicationClassID,std::function<GameObject(void)>> classRegister;
+        std::map<ReplicationClassID,std::function<GameObject*(void)>> classRegister;
         ClassRegistry() = default;
         ~ClassRegistry();
     public:
         static ClassRegistry& getInstance(){
             static ClassRegistry instance;
             return instance;
-            
         }
-        GameObject Create(ReplicationClassID repCID);
+        GameObject* Create(ReplicationClassID repCID);
         void removeClassID(ReplicationClassID repCID);
-        void addClassID(ReplicationClassID repCID,std::function<GameObject(void)> fun);
         void standardInit();
+        template<class T>
+        void Register(T classToAdd)
+        {
+            classRegister.insert(std::make_pair(classToAdd.ClassID(), classToAdd.CreateInstance));
+        }
 };

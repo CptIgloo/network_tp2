@@ -78,7 +78,7 @@ int Enemy::Read(InputStream& stream)
     fy = fy / 1000;
     fz = fz / 1000;
 
-    if(!(-500.000f <= fx && fx <= 500.000f))
+    /*if(!(-500.000f <= fx && fx <= 500.000f))
     {
         std::cout << "Error : fx not between -500f,500f" << std::endl;
         return -1;
@@ -93,6 +93,7 @@ int Enemy::Read(InputStream& stream)
         std::cout << "Error : fz not between -500f,500f" << std::endl;
         return -1;
     }
+    */
 	position.pos_x = fx / 1000;
 	position.pos_y = fy / 1000;
 	position.pos_z = fz / 1000;

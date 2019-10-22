@@ -12,6 +12,7 @@ public:
     Enemy(){
         std::cout<<"Enemy created"<<std::endl;
     }
+    REPLICATED(3,Enemy); 
     static const ReplicationClassID classID=0x03;  
     int Write(OutputStream& input) override;
     int Read(InputStream& input) override;

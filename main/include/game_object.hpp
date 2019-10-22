@@ -14,12 +14,12 @@ enum QuaternionCompression {X = 0,Y=1,Z=2,W=3};
 class GameObject
 {
 public:
-    static const ReplicationClassID classID=0x01; 
-
+    REPLICATED(1,GameObject);
     //virtual void Destroy();
     virtual int Write(OutputStream& input);
     virtual int Read(InputStream& input);
-    
+    void setPosition(float x,float y,float z);
+    void setRotation(float r_x,float r_y,float r_z,float r_w);
     struct Transform {
         float pos_x;
         float pos_y;

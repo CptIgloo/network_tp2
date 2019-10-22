@@ -24,7 +24,27 @@ void runAsServer()
 int main(int argc, char *argv[]) 
 {
     ReplicationManager r;
-    std::vector<std::byte> data={(std::byte)0x00,(std::byte)0x01,(std::byte)0x03,(std::byte)0x05,(std::byte)0x05,(std::byte)0x05,(std::byte)0x05,(std::byte)0x05};
+    OutputStream out;
+    std::vector<GameObject*> listGameObject;
+    Enemy e;
+    e.setPosition(1,2,3);
+    e.setRotation(4,5,6,7);
+    LinkingContext::addToContext(&e);
+    listGameObject.push_back(&e);
+    
+    Player p;
+    p.setPosition(1,2,3);
+    p.setRotation(4,5,6,7);
+    LinkingContext::addToContext(&p);
+    listGameObject.push_back(&p);
+    
+    r.Replicate(out,listGameObject);
+    std::vector<std::byte> data;
+    InputStream in=InputStream(data);
+    in.Write(out.Data());
+    r.Replicate(in);
+    std::cout<<"fini"<<std::endl;
+    //std::vector<std::byte> data={(std::byte)0x00,(std::byte)0x01,(std::byte)0x03,(std::byte)0x05,(std::byte)0x05,(std::byte)0x05,(std::byte)0x05,(std::byte)0x05};
     //data.push_back((std::byte)0x00);
     /*data[1]=1;
     data[2]=3;
@@ -32,6 +52,7 @@ int main(int argc, char *argv[])
     data[4]=6;
     */
 
+   /*
     //LinkingContext::addToContextWithId(&Enemy(),1);
     InputStream in= InputStream(data);
     ClassRegistry::getInstance().standardInit();
@@ -39,6 +60,7 @@ int main(int argc, char *argv[])
     
 
     r.Replicate(in);
+    */
     /*
     if(argc != 4)
     {
