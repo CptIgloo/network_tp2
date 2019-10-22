@@ -65,7 +65,7 @@ void PacketManager::createReplicationPacket(std::vector<GameObject*> objects,Inp
     stream.Write(data_builder.Read(data_builder.Size()));
 }
 
-std::optional<std::vector<std::byte>> PacketManager::parsePacket(std::vector<std::byte>)
+std::optional<OutputStream> PacketManager::parsePacket(OutputStream stream)
 {
     return {};
 }

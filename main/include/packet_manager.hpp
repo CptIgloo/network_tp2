@@ -16,5 +16,5 @@ class PacketManager
     public :
         static const uint16_t protocol = ((uint8_t)0xc0 << 8) | ((uint8_t)0xde);
         static void createReplicationPacket(std::vector<GameObject*> objects,InputStream &stream);
-        static std::optional<std::vector<std::byte>> parsePacket(std::vector<std::byte>);
+        static std::optional<OutputStream> parsePacket(OutputStream stream);
 };
