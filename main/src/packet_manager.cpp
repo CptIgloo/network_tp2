@@ -23,15 +23,7 @@ void PacketManager::createReplicationPacket(std::vector<GameObject*> objects,Inp
 
         if(n_id_optional.has_value())
         {
-            //Network id = 2 octets => AB
-            NetworkID n_id = n_id_optional.value();
-            //On récupère B
-            uint8_t B = (uint8_t) (n_id & 0xff); 
-            //Shift pour récupérer A
-            uint8_t A = (uint8_t) (n_id >> 8);
-
-            data_builder.Write<uint8_t>(A);
-            data_builder.Write<uint8_t>(B);
+            data_builder.Write<NetworkID>(n_id_optional.value());
         
             // Class ID 1 octet
             ReplicationClassID r_id = object->classID;
