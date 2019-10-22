@@ -1,6 +1,5 @@
 #include "game_object.hpp"
 
-
 int GameObject::Write(OutputStream &stream) {
     return 1;
 }

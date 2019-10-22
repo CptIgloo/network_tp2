@@ -3,6 +3,7 @@
 #include <server.hpp>
 #include <replication_manager.hpp>
 #include <classRegistry.hpp>
+#include <linking_context.hpp>
 #include <client.hpp>
 
 void runAsClient(std::string ip,int port)
@@ -23,16 +24,19 @@ void runAsServer()
 int main(int argc, char *argv[]) 
 {
     ReplicationManager r;
-    std::vector<std::byte> data={(std::byte)0x00,(std::byte)0x01,(std::byte)0x03,(std::byte)0x05};
+    std::vector<std::byte> data={(std::byte)0x00,(std::byte)0x01,(std::byte)0x03,(std::byte)0x05,(std::byte)0x05,(std::byte)0x05,(std::byte)0x05,(std::byte)0x05};
     //data.push_back((std::byte)0x00);
     /*data[1]=1;
     data[2]=3;
     data[3]=5;
     data[4]=6;
     */
+
+    //LinkingContext::addToContextWithId(&Enemy(),1);
     InputStream in= InputStream(data);
     ClassRegistry::getInstance().standardInit();
     //in.Write(data);
+    
 
     r.Replicate(in);
     /*

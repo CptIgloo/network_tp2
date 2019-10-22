@@ -11,9 +11,14 @@
 void ReplicationManager::Replicate(OutputStream stream,std::vector<GameObject*> objects)
 {
     for(GameObject* gptr:objects){
-        
-       // stream.Write<uint16_t>(LinkingContext::getIdOfObject(gptr));
-        gptr->Write(stream);
+        auto id_Obj= LinkingContext::getIdOfObject(gptr);
+        if(id_Obj.has_value()){
+            stream.Write<uint16_t>(id_Obj.value());
+            gptr->Write(stream);
+        }
+        else{
+            std::cout<<"Object does not exist in context"<<std::endl;
+        }
     }
 }
 
@@ -22,21 +27,30 @@ void ReplicationManager::Replicate(InputStream stream)
     uint16_t networkID;
     ReplicationClassID classID;
     uint8_t taille;
-    GameObject g;
+    
     networkID=stream.Read<uint8_t>() << 8 | stream.Read<uint8_t>();
 
+    std::optional<GameObject*> gptr=LinkingContext::getObjectOfId(networkID);
     
-    if (LinkingContext::getObjectOfId(networkID).has_value()){
-        
-    }
     classID=stream.Read<ReplicationClassID>();
     if(classID<0||classID>3){
-        std::cout<<"classID nous valable"<<std::endl;
-        assert(EXIT_FAILURE);
+            std::cout<<"classID not valid"<<std::endl;
+            assert(EXIT_FAILURE);
     }
     taille=stream.Read<uint8_t>();
-    g=ClassRegistry::getInstance().Create(classID);
-    g.Read(stream);
+    
+    //If the GameObject is in the linkingContext but not in the set, we add it.
+    if (gptr.has_value()&&this->replicatedObjects.find(gptr.value())==this->replicatedObjects.end()){
+        this->replicatedObjects.insert(gptr.value());
+        gptr.value()->Read(stream);
+    }
+    else{
+        std::cout<<"New object created"<<std::endl;
+        GameObject g=ClassRegistry::getInstance().Create(classID);
+        g.Read(stream);
+        this->replicatedObjects.insert(&g);
+    }
+   
     std::cout<<"Received "<<std::to_string(networkID)<<" "<<std::to_string(classID)<<" "<<std::to_string(taille)<<std::endl;
-
+    
 }

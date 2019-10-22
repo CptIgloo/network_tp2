@@ -24,8 +24,8 @@ GameObject ClassRegistry::Create(ReplicationClassID repCID){
     assert(EXIT_FAILURE);
 }
  void ClassRegistry::standardInit(){
-    auto lambda = [] () { return Enemy(); };
+    auto lambda = [] ()->Enemy { return Enemy(); };
     ClassRegistry::getInstance().addClassID(Enemy::classID,lambda);
-    auto lambda2=[] () { return Player(); };
+    auto lambda2=[] ()->Player { return Player(); };
     ClassRegistry::getInstance().addClassID(Player::classID,lambda2);
  }
