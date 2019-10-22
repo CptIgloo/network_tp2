@@ -1,3 +1,4 @@
+#include "packet_manager.hpp"
 #include "linking_context.hpp"
 #include "player.hpp"
 #include <optional>
@@ -6,46 +7,11 @@
 int main()
 {
     
-    /*
     Player a = Player();
-    a.nom = "Martin";
-
+    std::vector<GameObject*> v = std::vector<GameObject*>();
     LinkingContext::addToContext(&a);
-
-    Player b = Player();
-    b.nom = "Denis";
-
-    LinkingContext::addToContext(&b);
-
-    std::optional<NetworkID> idA = LinkingContext::getIdOfObject(&a);
-
-    std::cout<<"Size of context "<<LinkingContext::getSizeOfContext()<<std::endl;
-    
-    if(idA.has_value())
-    {
-        std::cout<<"IdA "<<idA.value()<<std::endl;
-    }
-    else
-    {
-        std::cout<<"No value"<<std::endl;
-    }
-    
-    test c = test();
-
-    c.a();
-
-    LinkingContext::deleteFromContext(&a);
-
-    std::cout<<"Size of context "<<LinkingContext::getSizeOfContext()<<std::endl;
-
-    idA = LinkingContext::getIdOfObject(&a);
-    
-    if(idA.has_value())
-    {
-        std::cout<<"IdA "<<idA.value()<<std::endl;
-    }
-    else
-    {
-        std::cout<<"No value"<<std::endl;
-    }*/
+    v.push_back(&a);
+    InputStream stream = InputStream();
+    PacketManager::createReplicationPacket(v,stream);
+    std::cout<<"YAY"<<std::endl;
 }

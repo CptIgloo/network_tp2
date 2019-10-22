@@ -10,6 +10,8 @@ int main() {
 
     while(true)
     {
+        char a[1] = {(char)0x41};
         server.run();
+        server.send((uint8_t*)a,1);
     }
 }

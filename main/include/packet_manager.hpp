@@ -11,18 +11,10 @@ enum class PacketType : uint8_t
     PacketType_Max
 };
 
-struct Packet
-{
-    char protocol[2] = {(char)0xc0,(char)0xde};
-    PacketType type;
-    NetworkID network_id;  
-    char* data;
-    int data_size;
-};
-
 class PacketManager
 {
     public :
-        static std::string createReplicationPacket(std::vector<GameObject*> objects);
+        static const uint16_t protocol = ((uint8_t)0xc0 << 8) | ((uint8_t)0xde);
+        static void createReplicationPacket(std::vector<GameObject*> objects,InputStream &stream);
         static std::optional<std::vector<std::byte>> parsePacket(std::vector<std::byte>);
 };

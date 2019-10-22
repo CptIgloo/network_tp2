@@ -1,3 +1,5 @@
+#ifndef LINKING_CONTEXT_HPP
+#define LINKING_CONTEXT_HPP
 #include <optional>
 #include "game_object.hpp"
 #include <map>
@@ -25,3 +27,4 @@ class LinkingContext
         static std::optional<GameObject*> getObjectOfId(NetworkID search);
         static void clearContext();
 };
+#endif

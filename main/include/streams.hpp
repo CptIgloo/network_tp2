@@ -83,6 +83,11 @@ protected:
 class InputStream : public MemoryStream
 {
 public:
+    InputStream()   
+    {
+        MemoryStream();
+    }
+
     InputStream(gsl::span<char> data)
     {
         Reinit(data);

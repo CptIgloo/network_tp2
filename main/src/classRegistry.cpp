@@ -21,7 +21,9 @@ GameObject ClassRegistry::Create(ReplicationClassID repCID){
     if(this->classRegister.find(repCID)!=this->classRegister.end()){
         return this->classRegister[repCID]();
     }
+    //TODO Cleanup ? 
     assert(EXIT_FAILURE);
+    return {};
 }
  void ClassRegistry::standardInit(){
     auto lambda = [] () { return Enemy(); };

@@ -5,14 +5,9 @@
 class ReplicationManager
 {
     private :
-        std::unordered_set<GameObject*> replicatedObjects;
+        static std::unordered_set<GameObject*> replicatedObjects;
 
     public :
-        static ReplicationManager& getInstance(){
-            static ReplicationManager instance;
-            return instance;
-            
-        }
-        void Replicate(OutputStream stream,std::vector<GameObject*> objects);
-        void Replicate(InputStream stream);
+        static void Replicate(InputStream &stream,std::vector<GameObject*> objects);
+        static void Replicate(OutputStream &stream);
 };

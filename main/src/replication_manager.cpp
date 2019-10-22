@@ -10,10 +10,7 @@ std::unordered_set<GameObject*> ReplicationManager::replicatedObjects = std::uno
 void ReplicationManager::Replicate(InputStream &stream,std::vector<GameObject*> objects)
 {
     stream.Flush();
-
-    std::string toSend = PacketManager::createReplicationPacket(objects);
-
-    stream.WriteStr(toSend);
+    PacketManager::createReplicationPacket(objects,stream);
 }
 
 void ReplicationManager::Replicate(OutputStream &stream)

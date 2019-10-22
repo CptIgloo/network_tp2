@@ -1,23 +1,22 @@
 #include "packet_manager.hpp"
 
-std::string PacketManager::createReplicationPacket(std::vector<GameObject*> objects)
+void PacketManager::createReplicationPacket(std::vector<GameObject*> objects,InputStream &stream)
 {
-    std::string output = "";
+    stream.Flush();
 
-    //PROTOCOL
+    //Protocol
 
-    output += (char) 0xc0;
-    output += (char) 0xde;
+    stream.Write<const uint16_t>(PacketManager::protocol);
 
     //TYPE
-
-    output += (char) PacketType::Sync;
+    uint8_t type = (uint8_t)PacketType::Sync;
+    stream.Write<uint8_t>(type);
 
     //Construction data 
 
     //N_ID (2) - C_ID (1) - SIZE (1) - DATA
 
-    std::string data_builder = "";
+    OutputStream data_builder;
     for(GameObject* object : objects)
     {
         std::optional<NetworkID> n_id_optional = LinkingContext::getIdOfObject(object);
@@ -27,28 +26,25 @@ std::string PacketManager::createReplicationPacket(std::vector<GameObject*> obje
             //Network id = 2 octets => AB
             NetworkID n_id = n_id_optional.value();
             //On récupère B
-            char B = n_id & 0xff; 
+            uint8_t B = (uint8_t) (n_id & 0xff); 
             //Shift pour récupérer A
-            char A = n_id >> 8;
+            uint8_t A = (uint8_t) (n_id >> 8);
 
-            data_builder += A;
-            data_builder += B;
-
-            //TODO Mettre en prod
-            /*
+            data_builder.Write<uint8_t>(A);
+            data_builder.Write<uint8_t>(B);
+        
             // Class ID 1 octet
             ReplicationClassID r_id = object->classID;
-            data_builder += (char) r_id
-            */
-
+            data_builder.Write<ReplicationClassID>(r_id);
+            
             //Récupération data
             OutputStream objectData;
             object->Write(objectData);
-            std::string formated_data = objectData.ReadStr();
-
+            gsl::span<std::byte> formated_data = objectData.Read(objectData.Size());
             //Ajoute la taille de la data (En principe un octet suffit)
-            data_builder += (char)(formated_data.size() & 0xFF); 
-            data_builder += formated_data;
+            uint8_t data_size = (uint8_t)(formated_data.size() & 0xFF);
+            data_builder.Write<uint8_t>(data_size); 
+            data_builder.Write(formated_data);
         }
         else
         {
@@ -57,16 +53,16 @@ std::string PacketManager::createReplicationPacket(std::vector<GameObject*> obje
     }
     
     //Data total size 2 octets
-    uint16_t data_size = (data_builder.size() && 0xFFFF);
+    uint16_t data_size = (data_builder.Size() && 0xFFFF);
     //On récupère B
-    char B = data_size & 0xff; 
+    uint8_t B = (uint8_t) (data_size & 0xff); 
     //Shift pour récupérer A
-    char A = data_size >> 8;
+    uint8_t A = (uint8_t) (data_size >> 8);
+    
+    stream.Write<uint8_t>(A);
+    stream.Write<uint8_t>(B);
 
-    output += A;
-    output += B;
-
-    return output;
+    stream.Write(data_builder.Read(data_builder.Size()));
 }
 
 std::optional<std::vector<std::byte>> PacketManager::parsePacket(std::vector<std::byte>)

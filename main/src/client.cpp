@@ -30,17 +30,15 @@ Client::Client(std::string ip,int port)
         
     });
 
-    tcp->on<uvw::DataEvent>([](const uvw::DataEvent& evt, uvw::TCPHandle &)
+    tcp->on<uvw::DataEvent>([](const uvw::DataEvent& evt, uvw::TCPHandle &tcp)
     {
-        std::string received_string;
+        OutputStream out = OutputStream();
 
         for(int i = 0;i<(int)evt.length;i++)
         {
-            received_string += evt.data[i];
+            out.Write<char>(evt.data[i]);
         }
-
-        OutputStream out = OutputStream();
-        out.WriteStr(received_string);
+        
         ReplicationManager::Replicate(out);
     });
 

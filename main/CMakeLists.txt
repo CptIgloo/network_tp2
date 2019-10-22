@@ -8,7 +8,8 @@ set(replication_sources src/game_object.cpp
                         src/server.cpp
                         src/client.cpp
                         src/classRegistry.cpp
-                        src/replication_manager.cpp)
+                        src/replication_manager.cpp
+                        src/packet_manager.cpp)
 
 set(main_sources        src/main.cpp
                         ${replication_sources})
@@ -32,7 +33,8 @@ set(replication_headers include/game_object.hpp
                         include/server.hpp
                         include/classRegistry.hpp
                         include/client.hpp
-                        include/replication_manager.hpp)
+                        include/replication_manager.hpp
+                        include/packet_manager.hpp)
 
 add_executable(tp2 ${main_sources} ${replication_headers})
 add_executable(test_client ${test_client_sources} ${replication_headers})

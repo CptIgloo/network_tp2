@@ -7,3 +7,7 @@ int GameObject::Write(OutputStream &stream) {
 int GameObject::Read(InputStream &stream) {
     return 1;
 }
+void GameObject::Destroy()
+{
+
+}
