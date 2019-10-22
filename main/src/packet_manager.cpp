@@ -53,19 +53,44 @@ void PacketManager::createReplicationPacket(std::vector<GameObject*> objects,Inp
     }
     
     //Data total size 2 octets
-    uint16_t data_size = (data_builder.Size() && 0xFFFF);
-    //On récupère B
-    uint8_t B = (uint8_t) (data_size & 0xff); 
-    //Shift pour récupérer A
-    uint8_t A = (uint8_t) (data_size >> 8);
-    
-    stream.Write<uint8_t>(A);
-    stream.Write<uint8_t>(B);
+    uint16_t data_size = (data_builder.Size() & 0xFFFF);
+
+    stream.Write<uint16_t>(data_size);
 
     stream.Write(data_builder.Read(data_builder.Size()));
 }
 
 std::optional<OutputStream> PacketManager::parsePacket(OutputStream stream)
 {
-    return {};
+    //Protocol
+
+    uint16_t received_protocol = stream.Read<uint16_t>();
+
+    if(received_protocol != PacketManager::protocol)
+    {
+        return {};
+    }
+
+    //Type 
+
+    uint8_t received_type = stream.Read<uint8_t>();
+    uint8_t expected = (uint8_t) PacketType::Sync;
+    
+    if(received_type !=  expected)
+    {
+        return {};
+    }
+
+    //Size
+    int received_size = (int) stream.Read<uint16_t>();
+    int expected_2 = stream.RemainingSize();
+    if( received_size > expected_2)
+    {
+        return {};
+    }
+
+    OutputStream output;
+    output.Write(stream.Read(stream.RemainingSize()));
+
+    return output;
 }
