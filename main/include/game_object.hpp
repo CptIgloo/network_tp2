@@ -27,7 +27,8 @@ static GameObject* CreateInstance() {return new className();}       \
 class GameObject
 {
     public:
-        static const ReplicationClassID classID=0x01; 
+        REPLICATED(1,GameObject);
+        
         GameObject() = default;
         virtual ~GameObject() = default;
         virtual void Destroy();
