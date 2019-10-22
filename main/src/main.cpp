@@ -17,7 +17,7 @@ void runAsClient(std::string ip,int port)
 
 void runAsServer()
 {
-    //TODO
+    //TODO Faire avec simulation du monde et tout
 }
 
 int main(int argc, char *argv[]) 
