@@ -10,6 +10,8 @@
 
 void ReplicationManager::Replicate(OutputStream& stream,std::vector<GameObject*> objects)
 {
+    uint8_t nul =(uint8_t)PacketType::Sync;
+    stream.Write<uint8_t>(nul);
     for(GameObject* gptr:objects){
         auto id_Obj= LinkingContext::getIdOfObject(gptr);
         if(id_Obj.has_value()){
@@ -17,7 +19,7 @@ void ReplicationManager::Replicate(OutputStream& stream,std::vector<GameObject*>
             ReplicationClassID r_id = gptr->ClassID();
             stream.Write<ReplicationClassID>(r_id);
             //Donner une vraie valeur à la taille
-            uint8_t nul=18;
+            nul=18;
             stream.Write<uint8_t>(nul);
             gptr->Write(stream);
             std::cout<<"Object written"<<std::endl;
@@ -31,17 +33,25 @@ void ReplicationManager::Replicate(OutputStream& stream,std::vector<GameObject*>
 void ReplicationManager::Replicate(InputStream& stream)
 {
     std::unordered_set<GameObject*> objectRemaining=this->replicatedObjects;
-    while(stream.RemainingSize()>=18){
-        objectRemaining.erase(this->readOneGameObject(stream));
-        while (stream.RemainingSize()%18!=0)
-        {
-            stream.Read<uint8_t>();
-        }
+    uint8_t packetType=stream.Read<uint8_t>();
+    if(packetType==(uint8_t)PacketType::Sync){
+        while(stream.RemainingSize()>=18){
+            objectRemaining.erase(this->readOneGameObject(stream));
+            while (stream.RemainingSize()%18!=0)
+            {
+                stream.Read<uint8_t>();
+            }
 
+        }
+        for(GameObject* toRemove:objectRemaining){
+            this->replicatedObjects.erase(toRemove);
+        }
     }
-    for(GameObject* toRemove:objectRemaining){
-        this->replicatedObjects.erase(toRemove);
+    else 
+    {
+        std::cout<<"Message du mauvais type"<<std::endl;
     }
+    
 }
 
 GameObject* ReplicationManager::readOneGameObject(InputStream& stream){

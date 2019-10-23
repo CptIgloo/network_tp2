@@ -8,8 +8,6 @@ void Enemy::Destroy()
 
 int Enemy::Write(OutputStream& stream)
 {
-
-
     uint64_t posX = (uint32_t)((position.pos_x * 1000) + 500000);
 
     uint64_t PosY = (uint32_t)((position.pos_y * 1000) + 500000);
@@ -84,7 +82,7 @@ int Enemy::Read(InputStream& stream)
     float fy = (y - 500000 ) / 1000;
     float fz = (y - 500000 ) / 1000;
 
-    /*if(!(-500.000f <= fx && fx <= 500.000f))
+    if(!(-500.000f <= fx && fx <= 500.000f))
     {
         std::cout << "Error : fx not between -500f,500f" << std::endl;
         return -1;
@@ -99,7 +97,7 @@ int Enemy::Read(InputStream& stream)
         std::cout << "Error : fz not between -500f,500f" << std::endl;
         return -1;
     }
-    */
+    
 	position.pos_x = fx / 1000;
 	position.pos_y = fy / 1000;
 	position.pos_z = fz / 1000;
@@ -115,12 +113,12 @@ int Enemy::Read(InputStream& stream)
 	{
         rX =  (static_cast<float>((0x3FF & dataQuat >> offset) * 1047) / 1000) - 0.707; 
 		sumSquareRoot += rX * rX ;
-		offset += 10;/*
+		offset += 10;
         if(!(-1.0f <=rX &&  rX <= 1.0f))
         {
            std::cout << "Error : rX not between -1f,1f" << std::endl;
            return -1;
-        }*/
+        }
 	}
 	if (ignoredVal != 1)
 	{
@@ -128,35 +126,35 @@ int Enemy::Read(InputStream& stream)
 		sumSquareRoot += rY * rY ;
 		offset += 10;
         rotation.r_y = rY;
-        /*
+        
         if(!(-1.0f <=rY &&  rY <= 1.0f))
         {
            std::cout << "Error : rY not between -1f,1f" << std::endl;
            return -1;
-        }*/
+        }
 	}
 	if (ignoredVal != 2)
 	{
 		rZ =  (static_cast<float>((0x3FF & dataQuat >> offset) * 1047) / 1000) - 0.707; 
 		sumSquareRoot += rZ * rZ ;
 		offset += 10;
-        rotation.r_z = rZ;/*
+        rotation.r_z = rZ;
         if(!(-1.0f <=rZ &&  rZ <= 1.0f))
         {
            std::cout << "Error : rZ not between -1f,1f" << std::endl;
            return -1;
-        }*/
+        }
 	}
 	if (ignoredVal != 3)
 	{
 		rW =  (static_cast<float>((0x3FF & dataQuat >> offset) * 1047) / 1000) - 0.707; 
 		sumSquareRoot += rW * rW ;
-        rotation.r_w= rW;/*
+        rotation.r_w= rW;
         if(!(-1.0f <=rW &&  rW <= 1.0f))
         {
            std::cout << "Error : rW not between -1f,1f" << std::endl;
            return -1;
-        }*/
+        }
 	}
 
     if(ignoredVal != 0)
