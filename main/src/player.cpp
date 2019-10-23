@@ -1,16 +1,25 @@
 #include "player.hpp"
 #include <iostream>
 
+void Player::Destroy()
+{
+	return;
+}
+
 int Player::Write(OutputStream &stream)
 {
-    //float to int compression
-    uint32_t posX = (uint32_t)((position.pos_x * 1000) + 500000);
+    uint8_t id = classID;
+    stream.Write<uint8_t>(id);
+    uint64_t posX = (uint32_t)((position.pos_x * 1000) + 500000);
 
-    uint32_t PosY = (uint32_t)((position.pos_y * 1000) + 500000);
+    uint64_t PosY = (uint32_t)((position.pos_y * 1000) + 500000);
 
-    uint32_t PosZ = (uint32_t)((position.pos_z * 1000) + 500000);
+    uint64_t PosZ = (uint32_t)((position.pos_z * 1000) + 500000);
 
-    uint64_t dataPos = posX << 20 + PosY << 20 + PosZ;
+    uint64_t dataPos = posX << 20 ;
+    dataPos += PosY << 20 ;
+    dataPos += PosZ;
+
     stream.Write<uint64_t>(dataPos);
 
     uint32_t compression;
@@ -66,17 +75,20 @@ int Player::Write(OutputStream &stream)
 
 int Player::Read(InputStream &stream)
 {   
-	uint64_t posData = stream.Read<uint64_t>();
-	uint64_t z = 0x00000000000FFFFF & posData;
-	uint64_t y = 0x00000000000FFFFF & posData >> 20;
-	uint64_t x = 0xFFFFF & posData >> 20;
+    uint8_t id = stream.Read<uint8_t>();
+    if(id != classID)
+    {
+        return -1;
+    }
 
-    float fx = y -500000;
-    float fy = y -500000;
-    float fz = y -500000;
-    fx = fx / 1000;
-    fy = fy / 1000;
-    fz = fz / 1000;
+	uint64_t posData = stream.Read<uint64_t>();
+	uint64_t z = 0xFFFFF & posData;
+	uint64_t y = 0xFFFFF & (posData >> 20);
+	uint64_t x = 0xFFFFF & (posData >> 20);
+
+    float fx = (y - 500000 ) / 1000;
+    float fy = (y - 500000 ) / 1000;
+    float fz = (y - 500000 ) / 1000;
 
     if(!(-500.000f <= fx && fx <= 500.000f))
     {
@@ -111,7 +123,7 @@ int Player::Read(InputStream &stream)
 		offset += 10;
         if(!(-1.0f <=rX &&  rX <= 1.0f))
         {
-           std::cout << "Error : rx not between -1f,1f" << std::endl;
+           std::cout << "Error : rX not between -1f,1f" << std::endl;
            return -1;
         }
 	}
@@ -123,7 +135,7 @@ int Player::Read(InputStream &stream)
         rotation.r_y = rY;
         if(!(-1.0f <=rY &&  rY <= 1.0f))
         {
-           std::cout << "Error : ry not between -1f,1f" << std::endl;
+           std::cout << "Error : rY not between -1f,1f" << std::endl;
            return -1;
         }
 	}
@@ -135,7 +147,7 @@ int Player::Read(InputStream &stream)
         rotation.r_z = rZ;
         if(!(-1.0f <=rZ &&  rZ <= 1.0f))
         {
-           std::cout << "Error : rz not between -1f,1f" << std::endl;
+           std::cout << "Error : rZ not between -1f,1f" << std::endl;
            return -1;
         }
 	}
@@ -146,7 +158,7 @@ int Player::Read(InputStream &stream)
         rotation.r_w= rW;
         if(!(-1.0f <=rW &&  rW <= 1.0f))
         {
-           std::cout << "Error : rw not between -1f,1f" << std::endl;
+           std::cout << "Error : rW not between -1f,1f" << std::endl;
            return -1;
         }
 	}

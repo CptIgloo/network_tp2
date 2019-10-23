@@ -9,13 +9,12 @@ enum : ReplicationClassID{mClassID = id};                           \
 virtual ReplicationClassID ClassID() const  { return mClassID;}     \
 static GameObject* CreateInstance() {return new className();}       \
 
-enum QuaternionCompression {X = 0,Y=1,Z=2,W=3};
-
 class GameObject
 {
 public:
     REPLICATED(1,GameObject);
     //virtual void Destroy();
+
     virtual int Write(OutputStream& input);
     virtual int Read(InputStream& input);
     void setPosition(float x,float y,float z);

@@ -11,4 +11,5 @@ public:
     REPLICATED(2,Player);
     int Write(OutputStream& input) override;
     int Read(InputStream& input) override;
+    void Destroy();
 };
