@@ -32,14 +32,14 @@ Client::Client(std::string ip,int port)
 
     tcp->on<uvw::DataEvent>([](const uvw::DataEvent& evt, uvw::TCPHandle &)
     {
-        OutputStream out = OutputStream();
+        std::vector<std::byte> data;
+        InputStream in = InputStream(data);
 
         for(int i = 0;i<(int)evt.length;i++)
         {
-            out.Write<char>(evt.data[i]);
+            in.Write<char>(evt.data[i]);
         }
-        InputStream stream_out = InputStream(out.Data());
-        ReplicationManager::getInstance().Replicate(stream_out);
+        ReplicationManager::getInstance().Replicate(in);
     });
 
     tcp->connect(std::string{"127.0.0.1"}, 4242);

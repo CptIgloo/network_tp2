@@ -27,8 +27,8 @@ int main(int argc, char *argv[])
     OutputStream out;
     std::vector<GameObject*> listGameObject;
     Enemy e;
-    e.setPosition(1,2,3);
-    e.setRotation(4,5,6,7);
+    e.setPosition(1.0,2.0,3.0);
+    e.setRotation(4.0,5.0,6.0,7.0);
     LinkingContext::addToContext(&e);
     listGameObject.push_back(&e);
     
