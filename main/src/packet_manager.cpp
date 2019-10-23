@@ -1,5 +1,7 @@
 #include "packet_manager.hpp"
 
+const uint16_t PacketManager::protocol = ((uint16_t)0xc0 << 8) | ((uint8_t)0xde);
+
 void PacketManager::createReplicationPacket(std::vector<std::shared_ptr<GameObject>> objects,InputStream &stream)
 {
     stream.Flush();

@@ -14,6 +14,6 @@ public:
     REPLICATED(3,Enemy); 
     int Write(OutputStream& input) override;
     int Read(InputStream& input) override;
-    void Destroy();
+    void Destroy() override;
 };
 #endif

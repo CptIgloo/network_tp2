@@ -1,5 +1,6 @@
 #include "player.hpp"
 #include <iostream>
+#include <math.h>
 
 void Player::Destroy()
 {

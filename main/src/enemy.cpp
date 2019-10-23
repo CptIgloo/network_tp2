@@ -1,5 +1,6 @@
 #include "enemy.hpp"
 #include <iostream>
+#include <math.h>
 
 void Enemy::Destroy()
 {

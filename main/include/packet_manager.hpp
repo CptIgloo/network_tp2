@@ -14,7 +14,7 @@ enum class PacketType : uint8_t
 class PacketManager
 {
     public :
-        static const uint16_t protocol = ((uint16_t)0xc0 << 8) | ((uint8_t)0xde);
+        static const uint16_t protocol;
         static void createReplicationPacket(std::vector<std::shared_ptr<GameObject>> objects,InputStream &stream);
         static std::optional<OutputStream> parsePacketAndGetData(OutputStream stream);
 };
