@@ -109,12 +109,12 @@ int Enemy::Read(InputStream& stream)
 	{
         rX =  (static_cast<float>((0x3FF & dataQuat >> offset) * 1047) / 1000) - 0.707; 
 		sumSquareRoot += rX * rX ;
-		offset += 10;
+		offset += 10;/*
         if(!(-1.0f <=rX &&  rX <= 1.0f))
         {
            std::cout << "Error : rx not between -1f,1f" << std::endl;
            return -1;
-        }
+        }*/
 	}
 	if (ignoredVal != 1)
 	{
@@ -122,34 +122,35 @@ int Enemy::Read(InputStream& stream)
 		sumSquareRoot += rY * rY ;
 		offset += 10;
         rotation.r_y = rY;
+        /*
         if(!(-1.0f <=rY &&  rY <= 1.0f))
         {
            std::cout << "Error : ry not between -1f,1f" << std::endl;
            return -1;
-        }
+        }*/
 	}
 	if (ignoredVal != 2)
 	{
 		rZ =  (static_cast<float>((0x3FF & dataQuat >> offset) * 1047) / 1000) - 0.707; 
 		sumSquareRoot += rZ * rZ ;
 		offset += 10;
-        rotation.r_z = rZ;
+        rotation.r_z = rZ;/*
         if(!(-1.0f <=rZ &&  rZ <= 1.0f))
         {
            std::cout << "Error : rz not between -1f,1f" << std::endl;
            return -1;
-        }
+        }*/
 	}
 	if (ignoredVal != 3)
 	{
 		rW =  (static_cast<float>((0x3FF & dataQuat >> offset) * 1047) / 1000) - 0.707; 
 		sumSquareRoot += rW * rW ;
-        rotation.r_w= rW;
+        rotation.r_w= rW;/*
         if(!(-1.0f <=rW &&  rW <= 1.0f))
         {
            std::cout << "Error : rw not between -1f,1f" << std::endl;
            return -1;
-        }
+        }*/
 	}
     
     if(ignoredVal != 0)

@@ -38,11 +38,22 @@ int main(int argc, char *argv[])
     LinkingContext::addToContext(&p);
     listGameObject.push_back(&p);
     
+    std::cout<<"Id Enemy "<<LinkingContext::getIdOfObject(&e).value()<<std::endl;
+    std::cout<<"Id Player "<<LinkingContext::getIdOfObject(&p).value()<<std::endl;
+
     r.Replicate(out,listGameObject);
     std::vector<std::byte> data;
     InputStream in=InputStream(data);
     in.Write(out.Data());
+    //LinkingContext::deleteFromContext(&e);
     r.Replicate(in);
+
+    listGameObject.pop_back();
+    out.Flush();
+    r.Replicate(out,listGameObject);
+    in.Write(out.Data());
+    r.Replicate(in);
+
     std::cout<<"fini"<<std::endl;
     //std::vector<std::byte> data={(std::byte)0x00,(std::byte)0x01,(std::byte)0x03,(std::byte)0x05,(std::byte)0x05,(std::byte)0x05,(std::byte)0x05,(std::byte)0x05};
     //data.push_back((std::byte)0x00);

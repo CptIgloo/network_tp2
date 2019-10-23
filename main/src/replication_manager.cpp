@@ -17,7 +17,7 @@ void ReplicationManager::Replicate(OutputStream& stream,std::vector<GameObject*>
             ReplicationClassID r_id = gptr->ClassID();
             stream.Write<ReplicationClassID>(r_id);
             //Donner une vraie valeur à la taille
-            uint8_t nul=10;
+            uint8_t nul=18;
             stream.Write<uint8_t>(nul);
             gptr->Write(stream);
             std::cout<<"Object written"<<std::endl;
@@ -33,7 +33,11 @@ void ReplicationManager::Replicate(InputStream& stream)
     std::unordered_set<GameObject*> objectRemaining=this->replicatedObjects;
     while(stream.RemainingSize()>=18){
         objectRemaining.erase(this->readOneGameObject(stream));
-        
+        while (stream.RemainingSize()%18!=0)
+        {
+            stream.Read<uint8_t>();
+        }
+
     }
     for(GameObject* toRemove:objectRemaining){
         this->replicatedObjects.erase(toRemove);
@@ -41,14 +45,14 @@ void ReplicationManager::Replicate(InputStream& stream)
 }
 
 GameObject* ReplicationManager::readOneGameObject(InputStream& stream){
-    uint16_t networkID;
+    NetworkID networkID;
     ReplicationClassID classID;
     uint8_t taille;
     
-    networkID=stream.Read<uint8_t>() << 8 | stream.Read<uint8_t>();
+    networkID=stream.Read<NetworkID>();
 
     std::optional<GameObject*> gptr=LinkingContext::getObjectOfId(networkID);
-    
+
     classID=stream.Read<ReplicationClassID>();
     if(classID<1||classID>3){
             std::cout<<"classID not valid"<<std::endl;
