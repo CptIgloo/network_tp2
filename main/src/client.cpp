@@ -38,8 +38,8 @@ Client::Client(std::string ip,int port)
         {
             out.Write<char>(evt.data[i]);
         }
-        
-        ReplicationManager::Replicate(out);
+        InputStream stream_out = InputStream(out.Data());
+        ReplicationManager::getInstance().Replicate(stream_out);
     });
 
     tcp->connect(std::string{"127.0.0.1"}, 4242);

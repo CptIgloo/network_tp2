@@ -8,8 +8,6 @@ void Enemy::Destroy()
 
 int Enemy::Write(OutputStream& stream)
 {
-
-
     uint64_t posX = (uint32_t)((position.pos_x * 1000) + 500000);
 
     uint64_t PosY = (uint32_t)((position.pos_y * 1000) + 500000);
@@ -17,7 +15,7 @@ int Enemy::Write(OutputStream& stream)
     uint64_t PosZ = (uint32_t)((position.pos_z * 1000) + 500000);
 
     uint64_t dataPos = posX << 20 ;
-    dataPos += PosY << 20 ;
+    dataPos += PosY << 40 ;
     dataPos += PosZ;
     stream.Write<uint64_t>(dataPos);
 
@@ -40,7 +38,8 @@ int Enemy::Write(OutputStream& stream)
     }
     else
     {
-        compression = 5;
+        //Default is 0
+        compression = 0;
     }
 
     uint32_t dataQuaternion = compression;
@@ -76,13 +75,13 @@ int Enemy::Read(InputStream& stream)
 {
 
 	uint64_t posData = stream.Read<uint64_t>();
-	uint64_t z = 0xFFFFF & posData;
-	uint64_t y = 0xFFFFF & (posData >> 20);
-	uint64_t x = 0xFFFFF & (posData >> 20);
+	uint32_t z = 0xFFFFF & posData;
+	uint32_t x = 0xFFFFF & (posData >> 20);
+	uint32_t y = 0xFFfFF & (posData >> 40);
 
-    float fx = (y - 500000 ) / 1000;
+    float fx = (x - 500000 ) / 1000;
     float fy = (y - 500000 ) / 1000;
-    float fz = (y - 500000 ) / 1000;
+    float fz = (z - 500000 ) / 1000;
 
     /*if(!(-500.000f <= fx && fx <= 500.000f))
     {
@@ -100,12 +99,12 @@ int Enemy::Read(InputStream& stream)
         return -1;
     }
     */
-	position.pos_x = fx / 1000;
-	position.pos_y = fy / 1000;
-	position.pos_z = fz / 1000;
+	position.pos_x = fx;
+	position.pos_y = fy;
+	position.pos_z = fz;
 
 	uint32_t dataQuat = stream.Read<uint32_t>();
-	uint8_t ignoredVal = 0x2 & dataQuat;
+	uint8_t ignoredVal = 0x3 & dataQuat;
 
 	uint8_t offset = 2;
 	uint32_t sumSquareRoot = 0;
@@ -113,7 +112,7 @@ int Enemy::Read(InputStream& stream)
     float rX = 0 , rY = 0 , rZ = 0 , rW = 0;
     if (ignoredVal != 0)
 	{
-        rX =  (static_cast<float>((0x3FF & dataQuat >> offset) * 1047) / 1000) - 0.707; 
+        rX = (static_cast<float>((((0x3FF & dataQuat >> offset)/(float)1024) * 1047) / (float)1000)) - 0.707; 
 		sumSquareRoot += rX * rX ;
 		offset += 10;/*
         if(!(-1.0f <=rX &&  rX <= 1.0f))
@@ -124,7 +123,7 @@ int Enemy::Read(InputStream& stream)
 	}
 	if (ignoredVal != 1)
 	{
-		rY =  (static_cast<float>((0x3FF & dataQuat >> offset) * 1047) / 1000) - 0.707; 
+		rY = (static_cast<float>((((0x3FF & dataQuat >> offset)/(float)1024) * 1047) / (float)1000)) - 0.707; 
 		sumSquareRoot += rY * rY ;
 		offset += 10;
         rotation.r_y = rY;
@@ -137,7 +136,7 @@ int Enemy::Read(InputStream& stream)
 	}
 	if (ignoredVal != 2)
 	{
-		rZ =  (static_cast<float>((0x3FF & dataQuat >> offset) * 1047) / 1000) - 0.707; 
+		rZ = (static_cast<float>((((0x3FF & dataQuat >> offset)/(float)1024) * 1047) / (float)1000)) - 0.707; 
 		sumSquareRoot += rZ * rZ ;
 		offset += 10;
         rotation.r_z = rZ;/*
@@ -149,7 +148,7 @@ int Enemy::Read(InputStream& stream)
 	}
 	if (ignoredVal != 3)
 	{
-		rW =  (static_cast<float>((0x3FF & dataQuat >> offset) * 1047) / 1000) - 0.707; 
+		rW = (static_cast<float>((((0x3FF & dataQuat >> offset)/(float)1024) * 1047) / (float)1000)) - 0.707; 
 		sumSquareRoot += rW * rW ;
         rotation.r_w= rW;/*
         if(!(-1.0f <=rW &&  rW <= 1.0f))
@@ -191,4 +190,9 @@ int Enemy::Read(InputStream& stream)
 
     type = stream.ReadStr();
     return 0;
+}
+
+void Enemy::setType(std::string newType)
+{
+    this->type = newType;
 }
