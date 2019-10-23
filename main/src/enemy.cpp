@@ -8,8 +8,7 @@ void Enemy::Destroy()
 
 int Enemy::Write(OutputStream& stream)
 {
-    uint8_t id = classID;
-    stream.Write<uint8_t>(id);
+
 
     uint64_t posX = (uint32_t)((position.pos_x * 1000) + 500000);
 
@@ -75,11 +74,6 @@ int Enemy::Write(OutputStream& stream)
 
 int Enemy::Read(InputStream& stream)
 {
-    uint8_t id = stream.Read<uint8_t>();
-    if(id != classID)
-    {
-        return -1;
-    }
 
 	uint64_t posData = stream.Read<uint64_t>();
 	uint64_t z = 0xFFFFF & posData;
