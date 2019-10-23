@@ -5,10 +5,11 @@
 #include "classRegistry.hpp"
 #include <optional>
 #include <iostream>
+#include <algorithm>
 
-std::unordered_set<GameObject*> ReplicationManager::replicatedObjects = std::unordered_set<GameObject*>();
+std::unordered_set<std::shared_ptr<GameObject>> ReplicationManager::replicatedObjects = std::unordered_set<std::shared_ptr<GameObject>>();
 
-void ReplicationManager::Replicate(InputStream &stream,std::vector<GameObject*> objects)
+void ReplicationManager::Replicate(InputStream &stream,std::vector<std::shared_ptr<GameObject>> objects)
 {
     stream.Flush();
     PacketManager::createReplicationPacket(objects,stream);
@@ -16,12 +17,13 @@ void ReplicationManager::Replicate(InputStream &stream,std::vector<GameObject*> 
 
 void ReplicationManager::Replicate(OutputStream &stream)
 {
-    std::optional<OutputStream> parsed_data_optional = PacketManager::parsePacket(stream);
+    std::optional<OutputStream> parsed_data_optional = PacketManager::parsePacketAndGetData(stream);
 
     if(parsed_data_optional.has_value())
     {
         OutputStream data = parsed_data_optional.value();
-        std::unordered_set<GameObject*> objects_received = std::unordered_set<GameObject*>();
+        std::unordered_set<std::shared_ptr<GameObject>> objects_received = std::unordered_set<std::shared_ptr<GameObject>>();
+        //N_ID (2) - C_ID (1) - SIZE (1) - DATA
         while(data.RemainingSize() > 0)
         {
             NetworkID n_id = data.Read<NetworkID>();
@@ -31,14 +33,14 @@ void ReplicationManager::Replicate(OutputStream &stream)
             gsl::span<std::byte> object_data = data.Read(object_size);
             InputStream stream_to_object = InputStream(object_data);
 
-            std::optional<GameObject*> object_pointer_optional = LinkingContext::getObjectOfId(n_id);
+            std::optional<std::shared_ptr<GameObject>> object_pointer_optional = LinkingContext::getObjectOfId(n_id);
 
             //Objet connu dans le contexte
             if(object_pointer_optional.has_value())
             {
-                GameObject* object = object_pointer_optional.value();
+                std::shared_ptr<GameObject> object = object_pointer_optional.value();
                 
-                if(object->classID == c_id)
+                if(object->ClassID() == c_id)
                 {
                     object->Read(stream_to_object);
                     objects_received.insert(object);
@@ -47,11 +49,40 @@ void ReplicationManager::Replicate(OutputStream &stream)
             else
             {
                 //Objet inconnu au contexte
-                GameObject object = ClassRegistry::getInstance().Create(c_id);
+                std::optional<std::shared_ptr<GameObject>> object_optional = ClassRegistry::getInstance().Create(c_id);
+                if(object_optional.has_value())
+                {
+                    std::shared_ptr<GameObject> object = object_optional.value();
+                    object->Read(stream_to_object);
+                    objects_received.insert(object);
+                    replicatedObjects.insert(object);
+                    LinkingContext::addToContext(object);
+                }
+                else
+                {
+                    std::cout<<"Invalid class id : ignoring object"<<std::endl;
+                }
             }
-            
         }
-        //N_ID (2) - C_ID (1) - SIZE (1) - DATA
+       
+        //Vérification et suprresion des objects qui n'existent plus
+        std::unordered_set<std::shared_ptr<GameObject>>::iterator it = replicatedObjects.begin();
+
+        while (it != replicatedObjects.end())
+        {
+            auto curr = it++;
+            if (objects_received.find(*curr) != objects_received.end()) {
+                replicatedObjects.erase(curr);
+            }
+        }
+
+        /* J'aurais bien aimé faire ca mais ca compile pas
+        auto end = std::remove_if(replicatedObjects.begin(),
+							replicatedObjects.end(),
+							[objects_received](std::shared_ptr<GameObject> it) {
+								return objects_received.find(it) != objects_received.end();
+							});
+        */
     }
     else
     {

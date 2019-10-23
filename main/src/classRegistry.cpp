@@ -5,11 +5,10 @@ ClassRegistry::~ClassRegistry(){
     this->classRegister.clear();
 }
 
-GameObject* ClassRegistry::Create(ReplicationClassID repCID)
+std::optional<std::shared_ptr<GameObject>> ClassRegistry::Create(ReplicationClassID repCID)
 {
     if(this->classRegister.find(repCID)!=this->classRegister.end()){
         return this->classRegister[repCID]();
     }
-    //TODO Cleanup ? 
     return {};
 }

@@ -22,7 +22,7 @@ struct Quaternion
 #define REPLICATED(id,className)                                    \
 enum : ReplicationClassID{mClassID = id};                           \
 virtual ReplicationClassID ClassID() const  { return mClassID;}     \
-static GameObject* CreateInstance() {return new className();}       \
+static std::shared_ptr<className> CreateInstance() {return std::make_shared<className>(className());}       \
 
 class GameObject
 {

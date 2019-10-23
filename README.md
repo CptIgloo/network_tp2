@@ -3,7 +3,6 @@
 ## TODO 
 
 * Replication Manager 
-    * Désérialization
     * Affichage
 
 * Serveur

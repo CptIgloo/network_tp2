@@ -7,7 +7,7 @@
 class ClassRegistry 
 {
     private:
-        std::map<ReplicationClassID,std::function<GameObject*(void)>> classRegister;
+        std::map<ReplicationClassID,std::function<std::shared_ptr<GameObject>(void)>> classRegister;
         ClassRegistry() = default;
         ~ClassRegistry();
     public:
@@ -22,5 +22,5 @@ class ClassRegistry
             classRegister.insert(std::make_pair(classToAdd.ClassID(), classToAdd.CreateInstance));
         }
 
-        GameObject* Create(ReplicationClassID repCID);
+        std::optional<std::shared_ptr<GameObject>> Create(ReplicationClassID repCID);
 };

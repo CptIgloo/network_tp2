@@ -1,6 +1,6 @@
 #include "packet_manager.hpp"
 
-void PacketManager::createReplicationPacket(std::vector<GameObject*> objects,InputStream &stream)
+void PacketManager::createReplicationPacket(std::vector<std::shared_ptr<GameObject>> objects,InputStream &stream)
 {
     stream.Flush();
 
@@ -17,7 +17,7 @@ void PacketManager::createReplicationPacket(std::vector<GameObject*> objects,Inp
     //N_ID (2) - C_ID (1) - SIZE (1) - DATA
 
     OutputStream data_builder;
-    for(GameObject* object : objects)
+    for(std::shared_ptr<GameObject> object : objects)
     {
         std::optional<NetworkID> n_id_optional = LinkingContext::getIdOfObject(object);
 
@@ -26,7 +26,7 @@ void PacketManager::createReplicationPacket(std::vector<GameObject*> objects,Inp
             data_builder.Write<NetworkID>(n_id_optional.value());
         
             // Class ID 1 octet
-            ReplicationClassID r_id = object->classID;
+            ReplicationClassID r_id = object->ClassID();
             data_builder.Write<ReplicationClassID>(r_id);
             
             //Récupération data
@@ -52,7 +52,7 @@ void PacketManager::createReplicationPacket(std::vector<GameObject*> objects,Inp
     stream.Write(data_builder.Read(data_builder.Size()));
 }
 
-std::optional<OutputStream> PacketManager::parsePacket(OutputStream stream)
+std::optional<OutputStream> PacketManager::parsePacketAndGetData(OutputStream stream)
 {
     //Protocol
 
@@ -66,17 +66,17 @@ std::optional<OutputStream> PacketManager::parsePacket(OutputStream stream)
     //Type 
 
     uint8_t received_type = stream.Read<uint8_t>();
-    uint8_t expected = (uint8_t) PacketType::Sync;
+    uint8_t expected_type = (uint8_t) PacketType::Sync;
     
-    if(received_type !=  expected)
+    if(received_type !=  expected_type)
     {
         return {};
     }
 
     //Size
     int received_size = (int) stream.Read<uint16_t>();
-    int expected_2 = stream.RemainingSize();
-    if( received_size > expected_2)
+    int expected_size = stream.RemainingSize();
+    if( received_size != expected_size)
     {
         return {};
     }
