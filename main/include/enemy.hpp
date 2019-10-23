@@ -1,17 +1,20 @@
 #include "game_object.hpp"
 #include <string>
+#include <iostream>
 
 class Enemy : public GameObject
 {
-public:
-    float posX;
-    float posY;
-    float posZ;
+private:
+    
     std::string type;
-    float rotX;
-    float rotY;
-    float rotZ;
-    float rotW;
+
+public:
+    Enemy(){
+        std::cout<<"Enemy created"<<std::endl;
+    }
+    REPLICATED(3,Enemy); 
+    static const ReplicationClassID classID=0x03;  
     int Write(OutputStream& input) override;
     int Read(InputStream& input) override;
+    void Destroy();
 };

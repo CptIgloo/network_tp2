@@ -3,15 +3,13 @@
 
 class Player : public GameObject
 {
+private:
+    
+    std::string name;
+    
 public:
-    float posX;
-    float posY;
-    float posZ;
-    std::string nom;
-    float rotX;
-    float rotY;
-    float rotZ;
-    float rotW;
+    REPLICATED(2,Player);
     int Write(OutputStream& input) override;
     int Read(InputStream& input) override;
+    void Destroy();
 };
