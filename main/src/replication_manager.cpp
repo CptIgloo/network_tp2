@@ -10,6 +10,8 @@
 
 void ReplicationManager::Replicate(OutputStream& stream,std::vector<GameObject*> objects)
 {
+    std::array<uint8_t,4> header={(uint8_t)'C',(uint8_t)'O',(uint8_t)'D',(uint8_t)'E'};
+    stream.Write<uint8_t>(header[0]);stream.Write<uint8_t>(header[1]);stream.Write<uint8_t>(header[2]);stream.Write<uint8_t>(header[3]);
     uint8_t nul =(uint8_t)PacketType::Sync;
     stream.Write<uint8_t>(nul);
     for(GameObject* gptr:objects){
@@ -32,6 +34,16 @@ void ReplicationManager::Replicate(OutputStream& stream,std::vector<GameObject*>
 
 void ReplicationManager::Replicate(InputStream& stream)
 {
+    
+    auto str = stream.Read(4);
+    std::string header;
+    std::transform(str.begin(), str.end(), std::back_inserter(header), [](std::byte b) { return (char)b; });
+
+   
+    std::cout<<header<<std::endl;
+    if (header.compare("CODE")!=0){
+        return;
+    }
     std::unordered_set<GameObject*> objectRemaining=this->replicatedObjects;
     uint8_t packetType=stream.Read<uint8_t>();
     if(packetType==(uint8_t)PacketType::Sync){

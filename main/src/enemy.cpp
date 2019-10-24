@@ -99,7 +99,7 @@ int Enemy::Read(InputStream& stream)
         std::cout << "Error : fz not between -500f,500f" << std::endl;
         return -1;
     }
-    */
+    
 	position.pos_x = fx;
 	position.pos_y = fy;
 	position.pos_z = fz;
