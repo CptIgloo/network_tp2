@@ -62,6 +62,6 @@ bool Client::continueRunning()
 
 void Client::Run()
 {
-    //TODO Est ce que y'as pas mieux ?
+    //Bof bof bof...
     loop->run<uvw::Loop::Mode::NOWAIT>();
 }

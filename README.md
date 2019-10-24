@@ -2,13 +2,8 @@
 
 ## TODO 
 
-* Serveur
-    * Faire une fonction de démo
-        * Envoi aléatoire de données aléatoires
-    * Brancher la sérialization
+* Mettre à jour le read me 
 
 * Client
     * Affichage
 
-* Main
-    * Finir le running as server

@@ -5,47 +5,15 @@
 
 int main()
 {
-    
-    /*
-    Player a = Player();
-    a.nom = "Martin";
-
-    LinkingContext::addToContext(&a);
-
-    Player b = Player();
-    b.nom = "Denis";
-
-    LinkingContext::addToContext(&b);
-
-    std::optional<NetworkID> idA = LinkingContext::getIdOfObject(&a);
-
-    std::cout<<"Size of context "<<LinkingContext::getSizeOfContext()<<std::endl;
-    
-    if(idA.has_value())
+    OutputStream stream;
+    uint8_t a = 0x41;
+    stream.Write<uint8_t>(a);
+    gsl::span<std::byte> b = stream.Data();
+    std::string builder = "";
+    for(std::byte byte : b)
     {
-        std::cout<<"IdA "<<idA.value()<<std::endl;
+        builder += (char)byte;
     }
-    else
-    {
-        std::cout<<"No value"<<std::endl;
-    }
-    
-    test c = test();
-
-    c.a();
-
-    LinkingContext::deleteFromContext(&a);
-
-    std::cout<<"Size of context "<<LinkingContext::getSizeOfContext()<<std::endl;
-
-    idA = LinkingContext::getIdOfObject(&a);
-    
-    if(idA.has_value())
-    {
-        std::cout<<"IdA "<<idA.value()<<std::endl;
-    }
-    else
-    {
-        std::cout<<"No value"<<std::endl;
-    }*/
+    uint8_t* test = (uint8_t*)builder.c_str();
+    std::cout<<test<<std::endl;
 }

@@ -66,6 +66,10 @@
         "gsl_assert": "cpp",
         "multi_span": "cpp",
         "span": "cpp",
-        "string_span": "cpp"
+        "string_span": "cpp",
+        "condition_variable": "cpp",
+        "future": "cpp",
+        "mutex": "cpp",
+        "random": "cpp"
     }
 }

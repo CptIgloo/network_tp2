@@ -7,6 +7,11 @@ void Player::Destroy()
 	return;
 }
 
+void Player::setName(std::string newName)
+{
+    name = newName;
+}
+
 int Player::Write(OutputStream &stream)
 {
     uint64_t posX = (uint32_t)((position.pos_x * 1000) + 500000);
