@@ -18,7 +18,7 @@ void ReplicationManager::Replicate(OutputStream& stream,std::vector<GameObject*>
     OutputStream tempOut;
 
     for(GameObject* gptr:objects){
-        tempOut.Flush();
+        tempOutputStream.Flush();
 
         auto id_Obj= LinkingContext::getIdOfObject(gptr);
         if(id_Obj.has_value()){
@@ -27,12 +27,12 @@ void ReplicationManager::Replicate(OutputStream& stream,std::vector<GameObject*>
             stream.Write<ReplicationClassID>(r_id);
             //Donner une vraie valeur à la taille
             
-            gptr->Write(tempOut);
+            gptr->Write(tempOutputStream);
             
-            temp=tempOut.Size();
+            temp=tempOutputStream.Size();
             stream.Write<uint8_t>(temp);
             
-            stream.Write(tempOut.Data());
+            stream.Write(tempOutputStream.Data());
             std::cout<<"Object written"<<std::endl;
         }
         else{
