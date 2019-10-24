@@ -15,7 +15,7 @@ void ReplicationManager::Replicate(OutputStream& stream,std::vector<GameObject*>
     uint8_t temp =(uint8_t)PacketType::Sync;
     stream.Write<uint8_t>(temp);
 
-    OutputStream tempOut;
+    OutputStream tempOutputStream;
 
     for(GameObject* gptr:objects){
         tempOutputStream.Flush();
