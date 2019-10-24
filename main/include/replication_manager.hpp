@@ -14,7 +14,7 @@ class ReplicationManager
 {
     private :
         std::unordered_set<GameObject*> replicatedObjects;
-        GameObject* readOneGameObject(InputStream& stream);
+        GameObject* readOneGameObject(InputStream& stream, uint8_t& taille);
     public :
 
         static ReplicationManager& getInstance(){

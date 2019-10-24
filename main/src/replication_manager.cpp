@@ -12,18 +12,27 @@ void ReplicationManager::Replicate(OutputStream& stream,std::vector<GameObject*>
 {
     std::array<uint8_t,4> header={(uint8_t)'C',(uint8_t)'O',(uint8_t)'D',(uint8_t)'E'};
     stream.Write<uint8_t>(header[0]);stream.Write<uint8_t>(header[1]);stream.Write<uint8_t>(header[2]);stream.Write<uint8_t>(header[3]);
-    uint8_t nul =(uint8_t)PacketType::Sync;
-    stream.Write<uint8_t>(nul);
+    uint8_t temp =(uint8_t)PacketType::Sync;
+    stream.Write<uint8_t>(temp);
+
+    OutputStream tempOut;
+
     for(GameObject* gptr:objects){
+        tempOut.Flush();
+
         auto id_Obj= LinkingContext::getIdOfObject(gptr);
         if(id_Obj.has_value()){
             stream.Write<NetworkID>(id_Obj.value());
             ReplicationClassID r_id = gptr->ClassID();
             stream.Write<ReplicationClassID>(r_id);
             //Donner une vraie valeur à la taille
-            nul=18;
-            stream.Write<uint8_t>(nul);
-            gptr->Write(stream);
+            
+            gptr->Write(tempOut);
+            
+            temp=tempOut.Size();
+            stream.Write<uint8_t>(temp);
+            
+            stream.Write(tempOut.Data());
             std::cout<<"Object written"<<std::endl;
         }
         else{
@@ -34,12 +43,11 @@ void ReplicationManager::Replicate(OutputStream& stream,std::vector<GameObject*>
 
 void ReplicationManager::Replicate(InputStream& stream)
 {
-    
+    uint8_t originalSize;
+    uint8_t size;
     auto str = stream.Read(4);
     std::string header;
     std::transform(str.begin(), str.end(), std::back_inserter(header), [](std::byte b) { return (char)b; });
-
-   
     std::cout<<header<<std::endl;
     if (header.compare("CODE")!=0){
         return;
@@ -48,8 +56,11 @@ void ReplicationManager::Replicate(InputStream& stream)
     uint8_t packetType=stream.Read<uint8_t>();
     if(packetType==(uint8_t)PacketType::Sync){
         while(stream.RemainingSize()>=18){
-            objectRemaining.erase(this->readOneGameObject(stream));
-            while (stream.RemainingSize()%18!=0)
+            originalSize=stream.RemainingSize();
+            size=0;
+            objectRemaining.erase(this->readOneGameObject(stream,size));
+            
+            while (stream.RemainingSize()%(size+4)!=0)
             {
                 stream.Read<uint8_t>();
             }
@@ -66,10 +77,9 @@ void ReplicationManager::Replicate(InputStream& stream)
     
 }
 
-GameObject* ReplicationManager::readOneGameObject(InputStream& stream){
+GameObject* ReplicationManager::readOneGameObject(InputStream& stream, uint8_t& taille){
     NetworkID networkID;
     ReplicationClassID classID;
-    uint8_t taille;
     
     networkID=stream.Read<NetworkID>();
 
