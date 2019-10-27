@@ -3,12 +3,37 @@
 #include <iostream>
 #include <thread>
 #include "player.hpp"
+#include "enemy.hpp"
+#include <random>
+#include "replication_manager.hpp"
 
 Server::Server(std::string ip,int port)
 {
     this->ip = ip;
     this->port = port;
     this->loop = uvw::Loop::getDefault();
+
+    Enemy* enemy_1 = (Enemy*) Enemy::CreateInstance();
+
+    enemy_1->setPosition(0,10,25);
+    enemy_1->setRotation(1,0,0,0);
+    enemy_1->setType("Uno");
+
+    Enemy* enemy_2 = (Enemy*) Enemy::CreateInstance();
+
+    enemy_2->setPosition(-10,5,-40);
+    enemy_2->setRotation(0,0,1,0);
+    enemy_2->setType("Dos");
+
+    Player* player = (Player*) Player::CreateInstance();
+
+    player->setPosition(0,0,0);
+    player->setRotation(0,0,1,0);
+    player->setName("Jack");
+
+    this->world.push_back(enemy_1);
+    this->world.push_back(enemy_2);
+    this->world.push_back(player);
 
     std::shared_ptr<uvw::TCPHandle> tcp = this->loop->resource<uvw::TCPHandle>();
 
@@ -59,11 +84,41 @@ Server::~Server()
 {
     this->clients.clear();
     this->loop->close();
+
+    for(GameObject* object : world)
+    {
+        delete(object);
+    }
 }
 
 void Server::run()
 {   
     this->loop->run<uvw::Loop::Mode::NOWAIT>();
+}
+
+void Server::updateWorld()
+{
+    OutputStream output_stream;
+
+    std::random_device rd; // obtain a random number from hardware
+    std::mt19937 eng(rd()); // seed the generator
+    std::uniform_int_distribution<> distr(-500,500); // define the range
+
+    for(GameObject* object : world)
+    {
+        object->setPosition((int) distr(eng),(int) distr(eng),(int) distr(eng));
+    }
+
+    ReplicationManager::getInstance().Replicate(output_stream,world);
+    gsl::span<std::byte> data_span = output_stream.Data();
+    std::string pointer_builder = "";
+    for(std::byte byte : data_span)
+    {
+        pointer_builder += (char)byte;
+    }
+    uint8_t* data_pointer = (uint8_t*)pointer_builder.c_str();
+
+    this->send(data_pointer,pointer_builder.length());
 }
 
 void Server::send(uint8_t* data,int size)
@@ -73,3 +128,4 @@ void Server::send(uint8_t* data,int size)
         client->write((char*)data, size);
     }
 }
+

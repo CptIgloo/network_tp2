@@ -10,8 +10,6 @@ void ClassRegistry::removeClassID(ReplicationClassID repCID){
     if(this->classRegister.find(repCID)!=this->classRegister.end()){
         this->classRegister.erase(repCID);
     }
-    //TODO Optionnal
-    assert(EXIT_FAILURE);
 }
 
 GameObject* ClassRegistry::Create(ReplicationClassID repCID)
@@ -19,7 +17,7 @@ GameObject* ClassRegistry::Create(ReplicationClassID repCID)
     if(this->classRegister.find(repCID)!=this->classRegister.end()){
         return this->classRegister[repCID]();
     }
-    //TODO Cleanup ? 
+    //TODO Faudrait un optional
     return {};
 }
  void ClassRegistry::standardInit(){
