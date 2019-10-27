@@ -12,10 +12,11 @@ void ReplicationManager::Replicate(OutputStream& stream,std::vector<GameObject*>
 {
     std::array<uint8_t,4> header={(uint8_t)'C',(uint8_t)'O',(uint8_t)'D',(uint8_t)'E'};
     stream.Write<uint8_t>(header[0]);stream.Write<uint8_t>(header[1]);stream.Write<uint8_t>(header[2]);stream.Write<uint8_t>(header[3]);
+    //Temp is only a temporary container for the next function because it doesn't want a casted value directly
     uint8_t temp =(uint8_t)PacketType::Sync;
     stream.Write<uint8_t>(temp);
 
-    OutputStream tempOut;
+    OutputStream tempOutputStream;
 
     for(GameObject* gptr:objects){
         tempOutputStream.Flush();
@@ -25,7 +26,6 @@ void ReplicationManager::Replicate(OutputStream& stream,std::vector<GameObject*>
             stream.Write<NetworkID>(id_Obj.value());
             ReplicationClassID r_id = gptr->ClassID();
             stream.Write<ReplicationClassID>(r_id);
-            //Donner une vraie valeur à la taille
             
             gptr->Write(tempOutputStream);
             
@@ -46,6 +46,7 @@ void ReplicationManager::Replicate(InputStream& stream)
     uint8_t originalSize;
     uint8_t size;
     auto str = stream.Read(4);
+    std::cout<<"New packet received"<<std::endl;
     std::string header;
     std::transform(str.begin(), str.end(), std::back_inserter(header), [](std::byte b) { return (char)b; });
     std::cout<<header<<std::endl;
@@ -54,6 +55,7 @@ void ReplicationManager::Replicate(InputStream& stream)
     }
     std::unordered_set<GameObject*> objectRemaining=this->replicatedObjects;
     uint8_t packetType=stream.Read<uint8_t>();
+     std::cout<<"Packet type: "<<std::to_string(packetType)<<std::endl;
     if(packetType==(uint8_t)PacketType::Sync){
         while(stream.RemainingSize()>=18){
             originalSize=stream.RemainingSize();
@@ -67,6 +69,7 @@ void ReplicationManager::Replicate(InputStream& stream)
 
         }
         for(GameObject* toRemove:objectRemaining){
+            std::cout<<"Removed a GameObject "<<std::endl;
             this->replicatedObjects.erase(toRemove);
         }
     }
